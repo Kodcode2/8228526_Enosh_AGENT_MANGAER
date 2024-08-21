@@ -1,4 +1,5 @@
 
+using AgentsApi.Data;
 using AgentsRest.Middleware;
 
 namespace AgentsRest
@@ -16,6 +17,11 @@ namespace AgentsRest
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Add DbContext
+            builder.Services.AddDbContext<ApplicationDbContext>();
+
+            // Add Services
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -27,11 +33,10 @@ namespace AgentsRest
 
             app.UseHttpsRedirection();
 
-            // Middleware
+            // Add Middleware
             app.UseMiddleware<SimpleMiddleware>();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
