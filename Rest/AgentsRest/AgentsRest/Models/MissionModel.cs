@@ -23,12 +23,12 @@ namespace AgentsRest.Models
         [Required]
         public required DateTime TimeLeft { get; set; }
 
-        public DateTime ExecutionTime { get; set; }
+        public DateTime? ExecutionTime { get; set; }
 
         public MissionStatus Status { get; set; } = MissionStatus.Proposal;
 
-        public AgentModel Agent { get; set; }
+        public AgentModel? Agent { get; set; }
 
-        public TargetModel Target { get; set; }
+        public TargetModel? Target { get; set; }
     }
 }

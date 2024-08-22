@@ -41,8 +41,9 @@ namespace AgentsRest.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -125,8 +126,9 @@ namespace AgentsRest.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -149,7 +151,7 @@ namespace AgentsRest.Migrations
             modelBuilder.Entity("AgentsRest.Models.MissionModel", b =>
                 {
                     b.HasOne("AgentsRest.Models.AgentModel", "Agent")
-                        .WithMany()
+                        .WithMany("AgentsMissions")
                         .HasForeignKey("AgentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -174,6 +176,11 @@ namespace AgentsRest.Migrations
                         .IsRequired();
 
                     b.Navigation("Location");
+                });
+
+            modelBuilder.Entity("AgentsRest.Models.AgentModel", b =>
+                {
+                    b.Navigation("AgentsMissions");
                 });
 #pragma warning restore 612, 618
         }
