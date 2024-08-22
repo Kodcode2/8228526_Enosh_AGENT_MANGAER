@@ -59,6 +59,15 @@
           }
         }
       },
+      "KdTree/1.4.1": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp2.0/KdTreeLib.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.0/KdTreeLib.dll": {}
+        }
+      },
       "Microsoft.Bcl.AsyncInterfaces/6.0.0": {
         "type": "package",
         "compile": {
@@ -1651,6 +1660,27 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
+      ]
+    },
+    "KdTree/1.4.1": {
+      "sha512": "yWbb35v/V9y88SLLMUPTlAN3pQEoPhDfZf9PApFnlU4kLtwVQ75U9vW5mW4/alQnLBuLKWBKcy4W5xK95mYsuA==",
+      "type": "package",
+      "path": "kdtree/1.4.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "kdtree.1.4.1.nupkg.sha512",
+        "kdtree.nuspec",
+        "lib/net45/KdTreeLib.dll",
+        "lib/net451/KdTreeLib.dll",
+        "lib/net452/KdTreeLib.dll",
+        "lib/net46/KdTreeLib.dll",
+        "lib/net461/KdTreeLib.dll",
+        "lib/net462/KdTreeLib.dll",
+        "lib/net47/KdTreeLib.dll",
+        "lib/net471/KdTreeLib.dll",
+        "lib/netcoreapp2.0/KdTreeLib.dll",
+        "lib/netstandard2.0/KdTreeLib.dll"
       ]
     },
     "Microsoft.Bcl.AsyncInterfaces/6.0.0": {
@@ -4535,6 +4565,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "KdTree >= 1.4.1",
       "Microsoft.EntityFrameworkCore >= 8.0.8",
       "Microsoft.EntityFrameworkCore.SqlServer >= 8.0.8",
       "Microsoft.EntityFrameworkCore.Tools >= 8.0.8",
@@ -4591,6 +4622,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "KdTree": {
+            "target": "Package",
+            "version": "[1.4.1, )"
+          },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
             "version": "[8.0.8, )"

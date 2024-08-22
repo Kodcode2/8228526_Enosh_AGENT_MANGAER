@@ -1,6 +1,7 @@
-
+﻿
 using AgentsApi.Data;
 using AgentsRest.Middleware;
+using AgentsRest.Service;
 
 namespace AgentsRest
 {
@@ -20,7 +21,12 @@ namespace AgentsRest
             // Add DbContext
             builder.Services.AddDbContext<ApplicationDbContext>();
 
+            //builder.Services.AddTransient(typeof(Lazy<>), typeof(Lazy<>));
+
             // Add Services
+            builder.Services.AddScoped<IAgentService, AgentService>();
+            builder.Services.AddScoped<ITargetService, TargetService>();
+            builder.Services.AddScoped<IMissionService, MissionService>();
 
             var app = builder.Build();
 
@@ -37,6 +43,13 @@ namespace AgentsRest
             app.UseMiddleware<SimpleMiddleware>();
 
             app.UseAuthorization();
+
+/*            // אתחול סינגלטון משימות בעת העלאת האפליקציה
+            using (IServiceScope scope = app.Services.CreateScope())
+            {
+                var missionService = scope.ServiceProvider.GetRequiredService<IMissionService>();
+                missionService.InitKdTreeSingleton().Wait();
+            }*/
 
             app.MapControllers();
 

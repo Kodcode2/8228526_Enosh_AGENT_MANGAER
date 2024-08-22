@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AgentsRest.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
-    public class TargetController : ControllerBase
+    public class MissionsController : ControllerBase
     {
     }
 }

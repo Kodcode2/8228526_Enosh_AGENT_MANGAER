@@ -135,3 +135,4 @@ C:\Users\Simch\source\repos\AgentsExam\Rest\AgentsRest\AgentsRest\obj\Debug\net8
 C:\Users\Simch\source\repos\AgentsExam\Rest\AgentsRest\AgentsRest\obj\Debug\net8.0\AgentsRest.pdb
 C:\Users\Simch\source\repos\AgentsExam\Rest\AgentsRest\AgentsRest\obj\Debug\net8.0\AgentsRest.genruntimeconfig.cache
 C:\Users\Simch\source\repos\AgentsExam\Rest\AgentsRest\AgentsRest\obj\Debug\net8.0\ref\AgentsRest.dll
+C:\Users\Simch\source\repos\AgentsExam\Rest\AgentsRest\AgentsRest\bin\Debug\net8.0\KdTreeLib.dll

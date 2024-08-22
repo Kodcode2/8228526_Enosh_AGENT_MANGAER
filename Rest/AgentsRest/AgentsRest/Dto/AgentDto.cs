@@ -8,11 +8,11 @@ namespace AgentsRest.Dto
 {
     public class AgentDto
     {
+        public string? Token { get; set; }
         public int Id { get; set; }
-        public string Nickname { get; set; } = string.Empty;
+        public string? Nickname { get; set; }
         public LocationDto Location { get; set; } = new LocationDto();
-        public AgentStatus Status { get; set; } = AgentStatus.Inactive;
-        public string Image { get; set; } = string.Empty;
-        public List<MissionModel> AgentsMissions { get; set; } = [];
+        public AgentStatus Status { get; set; }
+        public string? PhotoUrl { get; set; }
     }
 }

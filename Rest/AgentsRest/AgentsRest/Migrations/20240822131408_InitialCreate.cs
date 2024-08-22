@@ -57,6 +57,7 @@ namespace AgentsRest.Migrations
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LocationId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDetected = table.Column<bool>(type: "bit", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -79,8 +80,8 @@ namespace AgentsRest.Migrations
                     AgentId = table.Column<int>(type: "int", nullable: false),
                     TargetId = table.Column<int>(type: "int", nullable: false),
                     TimeLeft = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExecutionTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    ExecutionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

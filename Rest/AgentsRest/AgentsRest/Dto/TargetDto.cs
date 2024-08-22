@@ -7,12 +7,13 @@ namespace AgentsRest.Dto
 {
     public class TargetDto
     {
+        public string? Token { get; set; }
         public int Id { get; set; }
-        public required string Name { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty;
-        public LocationModel Location { get; set; } = new LocationModel();
-        public TargetStatus Status { get; set; } = TargetStatus.Live;
-
-        public string Image { get; set; }
+        public string? Name { get; set; }
+        public string? Position { get; set; } 
+        public LocationDto Location { get; set; } = new LocationDto();
+        public TargetStatus Status { get; set; }
+        public string? PhotoUrl { get; set; }
+        public bool IsDetected { get; set; } = false;
     }
 }

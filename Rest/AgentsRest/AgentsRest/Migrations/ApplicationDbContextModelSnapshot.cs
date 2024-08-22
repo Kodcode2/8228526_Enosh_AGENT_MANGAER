@@ -82,11 +82,12 @@ namespace AgentsRest.Migrations
                     b.Property<int>("AgentId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ExecutionTime")
+                    b.Property<DateTime?>("ExecutionTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TargetId")
                         .HasColumnType("int");
@@ -114,6 +115,9 @@ namespace AgentsRest.Migrations
                     b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDetected")
+                        .HasColumnType("bit");
 
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
