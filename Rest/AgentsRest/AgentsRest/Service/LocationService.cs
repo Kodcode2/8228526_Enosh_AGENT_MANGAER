@@ -12,9 +12,9 @@ namespace AgentsRest.Service
         IServiceProvider serviceProvider
     ) : ILocationService
     {
-        private IAgentService agentService = serviceProvider.GetRequiredService<IAgentService>();
-        private ITargetService targetService = serviceProvider.GetRequiredService<ITargetService>();
-        private IMissionService missionService = serviceProvider.GetRequiredService<IMissionService>();
+        private IAgentService agentService => serviceProvider.GetRequiredService<IAgentService>();
+        private ITargetService targetService => serviceProvider.GetRequiredService<ITargetService>();
+        private IMissionService missionService => serviceProvider.GetRequiredService<IMissionService>();
 
         public async Task<AgentModel?> MoveLocationAsync(AgentModel agent, string direction)
         {

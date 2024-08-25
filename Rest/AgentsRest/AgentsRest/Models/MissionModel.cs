@@ -27,7 +27,7 @@ namespace AgentsRest.Models
 
         public DateTime StartTime { get; set; } = DateTime.Now;
 
-        public DateTime LeftTime { get; set; }
+        public double EstimatedDuration { get; set; }
 
         public DateTime? ExecutionTime { get; set; }
 
@@ -38,6 +38,6 @@ namespace AgentsRest.Models
         public TargetModel? Target { get; set; }
 
         [NotMapped]
-        public List<EstimatesMissionsTimeModel> HistoryTimeLeft { get; set; } = [];
+        public List<EstimatedDurationsModel> HistoryTimeLeft { get; set; } = [];
     }
 }

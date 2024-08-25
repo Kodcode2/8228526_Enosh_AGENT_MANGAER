@@ -55,7 +55,7 @@ namespace AgentsRest.Migrations
                     b.ToTable("Agents");
                 });
 
-            modelBuilder.Entity("AgentsRest.Models.EstimatesMissionsTimeModel", b =>
+            modelBuilder.Entity("AgentsRest.Models.EstimatedDurationsModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,8 +63,8 @@ namespace AgentsRest.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("LeftTime")
-                        .HasColumnType("datetime2");
+                    b.Property<double>("EstimatedDuration")
+                        .HasColumnType("float");
 
                     b.Property<int>("MissionId")
                         .HasColumnType("int");
@@ -109,10 +109,10 @@ namespace AgentsRest.Migrations
                     b.Property<double>("Distance")
                         .HasColumnType("float");
 
-                    b.Property<DateTime?>("ExecutionTime")
-                        .HasColumnType("datetime2");
+                    b.Property<double>("EstimatedDuration")
+                        .HasColumnType("float");
 
-                    b.Property<DateTime>("LeftTime")
+                    b.Property<DateTime?>("ExecutionTime")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("StartTime")
@@ -182,7 +182,7 @@ namespace AgentsRest.Migrations
                     b.Navigation("Location");
                 });
 
-            modelBuilder.Entity("AgentsRest.Models.EstimatesMissionsTimeModel", b =>
+            modelBuilder.Entity("AgentsRest.Models.EstimatedDurationsModel", b =>
                 {
                     b.HasOne("AgentsRest.Models.MissionModel", "Mission")
                         .WithMany("HistoryTimeLeft")

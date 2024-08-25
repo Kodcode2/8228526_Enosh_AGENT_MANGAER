@@ -14,10 +14,10 @@ namespace AgentsRest.Service
         IServiceProvider serviceProvider
     ) : ITargetService
     {
-        private IAgentService agentService = serviceProvider.GetRequiredService<IAgentService>();
-        private IMissionService missionService = serviceProvider.GetRequiredService<IMissionService>();
-        private ILocationService locationService = serviceProvider.GetRequiredService<ILocationService>();
-        // Creating new Target
+        private IAgentService agentService => serviceProvider.GetRequiredService<IAgentService>();
+        private IMissionService missionService => serviceProvider.GetRequiredService<IMissionService>();
+        private ILocationService locationService => serviceProvider.GetRequiredService<ILocationService>();
+
         public async Task<TargetModel?> CreateTargetAsync(TargetDto targetDto)
         {
             try

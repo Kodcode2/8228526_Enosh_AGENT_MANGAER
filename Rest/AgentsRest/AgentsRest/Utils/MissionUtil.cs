@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: Util Utils
 
+using AgentsRest.Dto;
 using AgentsRest.Models;
 
 namespace AgentsRest.Utils
@@ -12,5 +13,7 @@ namespace AgentsRest.Utils
                 Coordinates = [agentModel.Location.X, agentModel.Location.Y],
                 AgentId = agentModel.Id,
             };
+
+        public static double ComputeTimeLeft(double distance) => distance / 5;
     }
 }

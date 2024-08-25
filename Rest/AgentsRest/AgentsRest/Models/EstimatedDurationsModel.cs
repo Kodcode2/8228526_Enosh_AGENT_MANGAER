@@ -2,7 +2,7 @@
 
 namespace AgentsRest.Models
 {
-    public class EstimatesMissionsTimeModel
+    public class EstimatedDurationsModel 
     {
         [Key]
         public int Id { get; set; }
@@ -10,9 +10,9 @@ namespace AgentsRest.Models
         [Required]
         public required int MissionId { get; set; }
 
-        public MissionModel Mission { get; set; }
-
         [Required]
-        public required DateTime LeftTime { get; set; }
+        public required double EstimatedDuration { get; set; }
+
+        public MissionModel Mission { get; set; }
     }
 }

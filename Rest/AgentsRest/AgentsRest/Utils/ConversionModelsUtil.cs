@@ -79,7 +79,7 @@ namespace AgentsRest.Utils
                 TargetId = missionDto.TargetId,
                 Distance = missionDto.Distance,
                 StartTime = missionDto.StartTime,
-                LeftTime = missionDto.LeftTime,
+                EstimatedDuration = missionDto.EstimatedDuration,
                 ExecutionTime = missionDto.ExecutionTime,
                 Status = missionDto.Status,
             };
@@ -92,7 +92,7 @@ namespace AgentsRest.Utils
                 TargetId = missionModel.TargetId,
                 Distance = missionModel.Distance,
                 StartTime = missionModel.StartTime,
-                LeftTime= missionModel.LeftTime,
+                EstimatedDuration = missionModel.EstimatedDuration,
                 ExecutionTime = missionModel.ExecutionTime,
                 Status = missionModel.Status,
             };

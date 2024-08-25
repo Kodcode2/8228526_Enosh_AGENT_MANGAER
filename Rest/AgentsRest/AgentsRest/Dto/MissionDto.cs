@@ -13,7 +13,7 @@ namespace AgentsRest.Dto
         public int TargetId { get; set; }
         public double Distance { get; set; }
         public DateTime StartTime { get; set; }
-        public DateTime LeftTime { get; set; }
+        public double EstimatedDuration { get; set; }
         public DateTime? ExecutionTime { get; set; }
         public MissionStatus Status { get; set; } = MissionStatus.Proposal;
     }

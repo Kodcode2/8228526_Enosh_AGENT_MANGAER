@@ -14,9 +14,9 @@ namespace AgentsRest.Service
         IServiceProvider serviceProvider
     ) : IAgentService
     {
-        private ITargetService targetService = serviceProvider.GetRequiredService<ITargetService>();
-        private IMissionService missionService = serviceProvider.GetRequiredService<IMissionService>();
-        private ILocationService locationService = serviceProvider.GetRequiredService<ILocationService>();
+        private ITargetService targetService => serviceProvider.GetRequiredService<ITargetService>();
+        private IMissionService missionService => serviceProvider.GetRequiredService<IMissionService>();
+        private ILocationService locationService => serviceProvider.GetRequiredService<ILocationService>();
 
         // Create new Agent
         public async Task<AgentModel?> CreateAgentAsync(AgentDto agentDto)

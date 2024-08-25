@@ -18,7 +18,7 @@ namespace AgentsApi.Data
         public DbSet<TargetModel> Targets { get; set; }
         public DbSet<LocationModel> Locations { get; set; }
         public DbSet<MissionModel> Missions { get; set; }
-        public DbSet<EstimatesMissionsTimeModel> HistoricalTimeLeft { get; set; }
+        public DbSet<EstimatedDurationsModel> HistoricalTimeLeft { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,7 +35,7 @@ namespace AgentsApi.Data
                 .OnDelete(DeleteBehavior.Restrict); // Restricting the deletion of shared information
 
 
-            modelBuilder.Entity<EstimatesMissionsTimeModel>()
+            modelBuilder.Entity<EstimatedDurationsModel>()
                 .HasOne(h => h.Mission) // Link each historical time record to Mission
                 .WithMany(m => m.HistoryTimeLeft) // Link The Mission to List of historical time record
                 .HasForeignKey(m => m.MissionId) // Defining a Foreign key between the mission and the historical time record
