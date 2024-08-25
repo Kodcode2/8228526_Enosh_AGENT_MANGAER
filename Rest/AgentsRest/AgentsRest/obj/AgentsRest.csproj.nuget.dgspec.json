@@ -50,9 +50,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "KdTree": {
+            "Accord.MachineLearning": {
               "target": "Package",
-              "version": "[1.4.1, )"
+              "version": "[3.8.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -70,7 +70,7 @@
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[6.7.1, )"
+              "version": "[6.7.2, )"
             }
           },
           "imports": [

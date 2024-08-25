@@ -19,16 +19,24 @@ namespace AgentsRest.Service
         private ILocationService locationService = serviceProvider.GetRequiredService<ILocationService>();
 
         // Create new Agent
-        public async Task<AgentModel> CreateAgentAsync(AgentDto agentDto)
+        public async Task<AgentModel?> CreateAgentAsync(AgentDto agentDto)
         {
-            if (agentDto == null) { throw new ArgumentNullException(nameof(agentDto)); } // Handling null input
+            try
+            {
+                if (agentDto == null) { throw new ArgumentNullException(nameof(agentDto)); } // Handling null input
 
-            AgentModel agentModel = AgentDtoToModel(agentDto); // Convert Dto to Model
+                AgentModel agentModel = AgentDtoToModel(agentDto); // Convert Dto to Model
 
-            await dbContext.AddAsync( agentModel ); // Add Agent to DbContext
-            await dbContext.SaveChangesAsync();
+                await dbContext.AddAsync(agentModel); // Add Agent to DbContext
+                await dbContext.SaveChangesAsync();
 
-            return agentModel;
+                return agentModel;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
         }
 
         /*// Get Agent by id, if not exists throw error
@@ -38,19 +46,27 @@ namespace AgentsRest.Service
 
         public async Task<AgentModel?> PlaceAgentAsync(int agentId, LocationDto location)
         {
-            if (location == null) { throw new ArgumentNullException(nameof(location)); } // Handling null input
+            try
+            {
+                if (location == null) { throw new ArgumentNullException(nameof(location)); } // Handling null input
 
-            AgentModel? agent = await dbContext.Agents.FindAsync(agentId);
+                AgentModel? agent = await dbContext.Agents.FindAsync(agentId);
 
-            if (agent == null) { return null; }
+                if (agent == null) { return null; }
 
-            if (!IsLocationValid(location.X, location.Y))
-            { throw new Exception($"Location X: {location.X}, Y: {location.Y}, not valid."); }
+                if (!IsLocationValid(location.X, location.Y))
+                { throw new Exception($"Location X: {location.X}, Y: {location.Y}, not valid."); }
 
-            agent.Location.X = location.X;
-            agent.Location.Y = location.Y;
-            await dbContext.SaveChangesAsync();
-            return agent;
+                agent.Location.X = location.X;
+                agent.Location.Y = location.Y;
+                await dbContext.SaveChangesAsync();
+                return agent;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
         }
 
         public async Task<AgentModel?> MoveAgentAsync(int id, string direction) =>

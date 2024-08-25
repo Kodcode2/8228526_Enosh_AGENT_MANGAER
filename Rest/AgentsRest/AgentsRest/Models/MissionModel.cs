@@ -23,11 +23,11 @@ namespace AgentsRest.Models
         [Required]
         public required int TargetId { get; set; }
 
-        [Required]
-        public required DateTime StartTime { get; set; } = DateTime.Now;
+        public double Distance { get; set; }
 
-        [Required]
-        public required DateTime LeftTime { get; set; }
+        public DateTime StartTime { get; set; } = DateTime.Now;
+
+        public DateTime LeftTime { get; set; }
 
         public DateTime? ExecutionTime { get; set; }
 
