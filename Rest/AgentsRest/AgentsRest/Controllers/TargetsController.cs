@@ -72,5 +72,29 @@ namespace AgentsRest.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut("{id}/pin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> SetTargetLocation(int id, [FromBody] LocationDto locationDto)
+        {
+            try
+            {
+                TargetModel? target = await targetService.GetTargetByIdAsync(id); // Try find the target
+                if (target == null) { return NotFound($"Target with id {id} does not exist."); } // return 404 if not exist
+                if (locationDto == null) { return BadRequest("Location not valid.");
+
+
+            }
+            catch (Exception ex) // Handling exceptions
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    $"An error occurred while fetching Location set. {ex.Message}"
+                );
+            }
+        }
+
     }
 }

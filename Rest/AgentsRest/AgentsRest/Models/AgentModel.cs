@@ -26,6 +26,8 @@ namespace AgentsRest.Models
         public string Image { get; set; } = 
             "https://stock.adobe.com/il/images/business-male-icon-simple-flat-design-concept/519881633";
 
+         public int Eliminations { get; set; } = 0;
+
         [NotMapped]
         public List<MissionModel> AgentsMissions { get; set; } = [];
 

@@ -30,10 +30,15 @@ namespace AgentsRest.Service
             throw new NotImplementedException();
         }
 
-        public Task<TargetModel?> PlaceTargetAsync(LocationDto location)
+        public Task<TargetModel?> PlaceTargetAsync(int targetId, LocationDto location)
         {
+            if (location == null ) { throw new ArgumentNullException(nameof(location)); } // Handling null input
             throw new NotImplementedException();
         }
+
+        public async Task<bool> IsTargetExists(int targetId) =>
+            await dbContext.Targets.FindAsync(targetId)
+            ?? false;
 
         // Get All Targets (If there are no Targets return empty list)
         public async Task<List<TargetModel>> GetAllTargetsAsync() =>

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgentsRest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240822131408_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240825070237_InitalCreate")]
+    partial class InitalCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace AgentsRest.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Eliminations")
+                        .HasColumnType("int");
 
                     b.Property<string>("Image")
                         .IsRequired()
@@ -53,6 +56,27 @@ namespace AgentsRest.Migrations
                     b.HasIndex("LocationId");
 
                     b.ToTable("Agents");
+                });
+
+            modelBuilder.Entity("AgentsRest.Models.EstimatesMissionsTimeModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("LeftTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MissionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MissionId");
+
+                    b.ToTable("HistoricalTimeLeft");
                 });
 
             modelBuilder.Entity("AgentsRest.Models.LocationModel", b =>
@@ -88,15 +112,18 @@ namespace AgentsRest.Migrations
                     b.Property<DateTime?>("ExecutionTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("LeftTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TargetId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("TimeLeft")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -155,6 +182,17 @@ namespace AgentsRest.Migrations
                     b.Navigation("Location");
                 });
 
+            modelBuilder.Entity("AgentsRest.Models.EstimatesMissionsTimeModel", b =>
+                {
+                    b.HasOne("AgentsRest.Models.MissionModel", "Mission")
+                        .WithMany("HistoryTimeLeft")
+                        .HasForeignKey("MissionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Mission");
+                });
+
             modelBuilder.Entity("AgentsRest.Models.MissionModel", b =>
                 {
                     b.HasOne("AgentsRest.Models.AgentModel", "Agent")
@@ -188,6 +226,11 @@ namespace AgentsRest.Migrations
             modelBuilder.Entity("AgentsRest.Models.AgentModel", b =>
                 {
                     b.Navigation("AgentsMissions");
+                });
+
+            modelBuilder.Entity("AgentsRest.Models.MissionModel", b =>
+                {
+                    b.Navigation("HistoryTimeLeft");
                 });
 #pragma warning restore 612, 618
         }

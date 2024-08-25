@@ -18,6 +18,7 @@ namespace AgentsApi.Data
         public DbSet<TargetModel> Targets { get; set; }
         public DbSet<LocationModel> Locations { get; set; }
         public DbSet<MissionModel> Missions { get; set; }
+        public DbSet<EstimatesMissionsTimeModel> HistoricalTimeLeft { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,6 +32,13 @@ namespace AgentsApi.Data
                 .HasOne(m => m.Target) // Link each mission to Target
                 .WithMany() // There is no link between Target and mission or anything else
                 .HasForeignKey(m => m.TargetId) // Defining a Foreign key between the mission and the target
+                .OnDelete(DeleteBehavior.Restrict); // Restricting the deletion of shared information
+
+
+            modelBuilder.Entity<EstimatesMissionsTimeModel>()
+                .HasOne(h => h.Mission) // Link each historical time record to Mission
+                .WithMany(m => m.HistoryTimeLeft) // Link The Mission to List of historical time record
+                .HasForeignKey(m => m.MissionId) // Defining a Foreign key between the mission and the historical time record
                 .OnDelete(DeleteBehavior.Restrict); // Restricting the deletion of shared information
 
             // Setting to save the statuses(Agent, Target, Mission) in text instead of int number

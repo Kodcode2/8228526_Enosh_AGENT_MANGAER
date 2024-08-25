@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AgentsRest.Models
 {
@@ -6,7 +7,9 @@ namespace AgentsRest.Models
     {
         Proposal,
         Assigned, 
-        Completed
+        Completed,
+        Canceled
+
     }
 
     public class MissionModel
@@ -21,7 +24,10 @@ namespace AgentsRest.Models
         public required int TargetId { get; set; }
 
         [Required]
-        public required DateTime TimeLeft { get; set; }
+        public required DateTime StartTime { get; set; } = DateTime.Now;
+
+        [Required]
+        public required DateTime LeftTime { get; set; }
 
         public DateTime? ExecutionTime { get; set; }
 
@@ -30,5 +36,8 @@ namespace AgentsRest.Models
         public AgentModel? Agent { get; set; }
 
         public TargetModel? Target { get; set; }
+
+        [NotMapped]
+        public List<EstimatesMissionsTimeModel> HistoryTimeLeft { get; set; } = [];
     }
 }

@@ -14,5 +14,6 @@ namespace AgentsRest.Dto
         public LocationDto Location { get; set; } = new LocationDto();
         public AgentStatus Status { get; set; }
         public string? PhotoUrl { get; set; }
+        public int Eliminations { get; set; } = 0;
     }
 }

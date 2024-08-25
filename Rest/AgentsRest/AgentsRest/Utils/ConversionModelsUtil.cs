@@ -31,6 +31,7 @@ namespace AgentsRest.Utils
                 Location = LocationDtoToModel(agentDto.Location),
                 Status = agentDto.Status,
                 Image = agentDto.PhotoUrl,
+                Eliminations = agentDto.Eliminations,
                 //AgentsMissions = agentDto.AgentsMissions, //////////
             };
 
@@ -42,6 +43,7 @@ namespace AgentsRest.Utils
                 Location = LocationModelToDto(agentModel.Location),
                 Status = agentModel.Status,
                 PhotoUrl = agentModel.Image,
+                Eliminations = agentModel.Eliminations,
                 //AgentsMissions = agentModel.AgentsMissions, /////////
             };
 
@@ -75,7 +77,8 @@ namespace AgentsRest.Utils
                 Id = missionDto.Id,
                 AgentId = missionDto.AgentId,
                 TargetId = missionDto.TargetId,
-                TimeLeft = missionDto.TimeLeft,
+                StartTime = missionDto.StartTime,
+                LeftTime = missionDto.LeftTime,
                 ExecutionTime = missionDto.ExecutionTime,
                 Status = missionDto.Status,
             };
@@ -86,7 +89,8 @@ namespace AgentsRest.Utils
                 Id = missionModel.Id,
                 AgentId = missionModel.AgentId,
                 TargetId = missionModel.TargetId,
-                TimeLeft = missionModel.TimeLeft,
+                StartTime = missionModel.StartTime,
+                LeftTime= missionModel.LeftTime,
                 ExecutionTime = missionModel.ExecutionTime,
                 Status = missionModel.Status,
             };

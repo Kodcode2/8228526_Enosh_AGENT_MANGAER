@@ -11,7 +11,8 @@ namespace AgentsRest.Dto
         public int Id { get; set; }
         public int AgentId { get; set; }
         public int TargetId { get; set; }
-        public DateTime TimeLeft { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime LeftTime { get; set; }
         public DateTime? ExecutionTime { get; set; }
         public MissionStatus Status { get; set; } = MissionStatus.Proposal;
     }
