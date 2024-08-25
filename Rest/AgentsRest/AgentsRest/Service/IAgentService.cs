@@ -8,7 +8,7 @@ namespace AgentsRest.Service
         Task<AgentModel> CreateAgentAsync(AgentDto agentDto);
         Task<AgentModel> UpdateAgentAsync(AgentDto agentDto);
         Task<AgentModel?> PlaceAgentAsync(int id, LocationDto locationDto);
-        Task<AgentModel> MoveAgentAsync(string direction);
+        Task<AgentModel> MoveAgentAsync(int id, string direction);
         Task<AgentModel?> GetAgentByIdAsync(int id);
         Task<List<AgentModel>> GetAllAgentsAsync();
         Task<bool> IsAgentExistAsync(int id);

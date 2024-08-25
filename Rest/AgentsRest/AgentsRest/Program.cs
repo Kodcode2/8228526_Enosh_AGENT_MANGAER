@@ -27,6 +27,7 @@ namespace AgentsRest
             builder.Services.AddScoped<IAgentService, AgentService>();
             builder.Services.AddScoped<ITargetService, TargetService>();
             builder.Services.AddScoped<IMissionService, MissionService>();
+            builder.Services.AddScoped<ILocationService, LocationService>();
 
             var app = builder.Build();
 
@@ -43,13 +44,6 @@ namespace AgentsRest
             app.UseMiddleware<SimpleMiddleware>();
 
             app.UseAuthorization();
-
-/*            // אתחול סינגלטון משימות בעת העלאת האפליקציה
-            using (IServiceScope scope = app.Services.CreateScope())
-            {
-                var missionService = scope.ServiceProvider.GetRequiredService<IMissionService>();
-                missionService.InitKdTreeSingleton().Wait();
-            }*/
 
             app.MapControllers();
 

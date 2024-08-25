@@ -7,7 +7,7 @@ namespace AgentsRest.Service
     {
         Task<TargetModel?> CreateTargetAsync(TargetDto target);
         Task<TargetModel?> PlaceTargetAsync(int targetId, LocationDto location);
-        Task<TargetModel> MoveTargetAsync(string direction);
+        Task<TargetModel> MoveTargetAsync(int id, string direction);
         Task<List<TargetModel>> GetAllTargetsAsync();
         Task<TargetModel?> GetTargetByIdAsync(int id);
         Task<bool> IsTargetExistAsync(int id);

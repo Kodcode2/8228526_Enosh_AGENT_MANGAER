@@ -5,11 +5,12 @@ using KdTree;
 namespace AgentsRest.Service
 {
     public class MissionService(
-        IServiceProvider serviceProvider    
+        IServiceProvider serviceProvider 
     ) : IMissionService
     {
         private IAgentService agentService = serviceProvider.GetRequiredService<IAgentService>();
         private ITargetService targetService = serviceProvider.GetRequiredService<ITargetService>();
+        private ILocationService locationService = serviceProvider.GetRequiredService<ILocationService>();
 
         public void InitKdTreeSingleton()
         {

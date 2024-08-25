@@ -5,13 +5,19 @@ using AgentsRest.Dto;
 using AgentsRest.Models;
 using Microsoft.EntityFrameworkCore;
 using static AgentsRest.Utils.ConversionModelsUtil;
+using static AgentsRest.Utils.LocationUtil;
 
 namespace AgentsRest.Service
 {
     public class AgentService(
-        ApplicationDbContext dbContext
+        ApplicationDbContext dbContext,
+        IServiceProvider serviceProvider
     ) : IAgentService
     {
+        private ITargetService targetService = serviceProvider.GetRequiredService<ITargetService>();
+        private IMissionService missionService = serviceProvider.GetRequiredService<IMissionService>();
+        private ILocationService locationService = serviceProvider.GetRequiredService<ILocationService>();
+
         // Create new Agent
         public async Task<AgentModel> CreateAgentAsync(AgentDto agentDto)
         {
@@ -30,23 +36,28 @@ namespace AgentsRest.Service
             await dbContext.Agents.FindAsync(id)
             ?? throw new Exception($"Agent with id {id} does not exists.");*/
 
-        public Task<AgentModel> MoveAgentAsync(string direction)
+        public async Task<AgentModel?> PlaceAgentAsync(int agentId, LocationDto location)
         {
-            throw new NotImplementedException();
-        }
+            if (location == null) { throw new ArgumentNullException(nameof(location)); } // Handling null input
 
-        public async Task<AgentModel?> PlaceAgentAsync(int id, LocationDto locationDto)
-        {
-            AgentModel? agent = await GetAgentByIdAsync(id);
-            LocationModel? location = LocationDtoToModel(locationDto);
+            AgentModel? agent = await dbContext.Agents.FindAsync(agentId);
 
-            if (agent == null || location == null) { return null; }
+            if (agent == null) { return null; }
 
-            agent.Location = location;
+            if (!IsLocationValid(location.X, location.Y))
+            { throw new Exception($"Location X: {location.X}, Y: {location.Y}, not valid."); }
+
+            agent.Location.X = location.X;
+            agent.Location.Y = location.Y;
             await dbContext.SaveChangesAsync();
-
             return agent;
         }
+
+        public async Task<AgentModel?> MoveAgentAsync(int id, string direction) =>
+            await locationService.MoveLocationAsync(
+                await GetAgentByIdAsync(id) ?? throw new Exception("Agent not found."),
+                direction
+            );
 
         public Task<AgentModel> UpdateAgentAsync(AgentDto agentDto)
         {

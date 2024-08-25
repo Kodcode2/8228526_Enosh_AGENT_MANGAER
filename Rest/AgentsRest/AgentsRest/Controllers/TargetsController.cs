@@ -14,13 +14,14 @@ namespace AgentsRest.Controllers
     public class TargetsController(
         ApplicationDbContext dbContext, 
         ITargetService targetService,
+        ILocationService locationService,
         ILogger<TargetsController> logger
     ) : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<TargetModel>>> GetAllTargets()
+        public async Task<ActionResult<List<TargetModel>>> GetAllTargetsAsync()
         {
             try
             {
@@ -45,7 +46,7 @@ namespace AgentsRest.Controllers
             try
             {
                 TargetModel? target = await targetService.GetTargetByIdAsync(id); // Try find the target
-                if (target == null) { return NotFound($"Target with id {id} does not exist."); } // return 404 if not exist
+                if (!await targetService.IsTargetExistAsync(id)) { return NotFound($"Target with id {id} does not exist."); } // return 404 if not exist
                 return Ok(target); // return 200 with the target
             }
             catch (Exception ex) // Handling exceptions
@@ -81,11 +82,13 @@ namespace AgentsRest.Controllers
         {
             try
             {
-                TargetModel? target = await targetService.GetTargetByIdAsync(id); // Try find the target
-                if (target == null) { return NotFound($"Target with id {id} does not exist."); } // return 404 if not exist
-                if (locationDto == null) { return BadRequest("Location not valid.");
+                if (!await targetService.IsTargetExistAsync(id)) 
+                { return NotFound($"Target with id {id} does not exist."); } // return 404 if not exist
 
+                if (locationDto == null) { return BadRequest("Location not valid."); }
 
+                await targetService.PlaceTargetAsync(id, locationDto);
+                return StatusCode(StatusCodes.Status204NoContent);
             }
             catch (Exception ex) // Handling exceptions
             {
@@ -96,5 +99,30 @@ namespace AgentsRest.Controllers
             }
         }
 
+        [HttpPut("{id}/move")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> MoveTargetLocation(int id, [FromBody] string direction)
+        {
+            try
+            {
+                if (!await targetService.IsTargetExistAsync(id))
+                { return NotFound($"Target with id {id} does not exist."); } // return 404 if not exist
+
+                // if (locationDto == null) { return BadRequest("Location not valid."); }
+
+                await targetService.MoveTargetAsync(id, direction);
+
+                return StatusCode(StatusCodes.Status204NoContent);
+            }
+            catch (Exception ex) // Handling exceptions
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    $"An error occurred while fetching Location set. {ex.Message}"
+                );
+            }
+        }
     }
 }
