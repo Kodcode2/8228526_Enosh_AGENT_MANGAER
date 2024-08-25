@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgentsRest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240825070237_InitalCreate")]
-    partial class InitalCreate
+    [Migration("20240825132441_InitialCrate")]
+    partial class InitialCrate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -108,6 +108,9 @@ namespace AgentsRest.Migrations
 
                     b.Property<int>("AgentId")
                         .HasColumnType("int");
+
+                    b.Property<double>("Distance")
+                        .HasColumnType("float");
 
                     b.Property<DateTime?>("ExecutionTime")
                         .HasColumnType("datetime2");

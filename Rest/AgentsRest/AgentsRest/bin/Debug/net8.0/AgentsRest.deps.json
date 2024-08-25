@@ -8,14 +8,62 @@
     ".NETCoreApp,Version=v8.0": {
       "AgentsRest/1.0.0": {
         "dependencies": {
-          "KdTree": "1.4.1",
+          "Accord.MachineLearning": "3.8.0",
           "Microsoft.EntityFrameworkCore": "8.0.8",
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.8",
           "Microsoft.EntityFrameworkCore.Tools": "8.0.8",
-          "Swashbuckle.AspNetCore": "6.7.1"
+          "Swashbuckle.AspNetCore": "6.7.2"
         },
         "runtime": {
           "AgentsRest.dll": {}
+        }
+      },
+      "Accord/3.8.0": {
+        "runtime": {
+          "lib/netstandard2.0/Accord.dll": {
+            "assemblyVersion": "3.8.0.0",
+            "fileVersion": "3.8.0.6134"
+          }
+        }
+      },
+      "Accord.MachineLearning/3.8.0": {
+        "dependencies": {
+          "Accord": "3.8.0",
+          "Accord.Math": "3.8.0",
+          "Accord.Statistics": "3.8.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Accord.MachineLearning.dll": {
+            "assemblyVersion": "3.8.0.0",
+            "fileVersion": "3.8.0.6134"
+          }
+        }
+      },
+      "Accord.Math/3.8.0": {
+        "dependencies": {
+          "Accord": "3.8.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Accord.Math.Core.dll": {
+            "assemblyVersion": "3.8.0.0",
+            "fileVersion": "3.8.0.6134"
+          },
+          "lib/netstandard2.0/Accord.Math.dll": {
+            "assemblyVersion": "3.8.0.0",
+            "fileVersion": "3.8.0.6134"
+          }
+        }
+      },
+      "Accord.Statistics/3.8.0": {
+        "dependencies": {
+          "Accord": "3.8.0",
+          "Accord.Math": "3.8.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Accord.Statistics.dll": {
+            "assemblyVersion": "3.8.0.0",
+            "fileVersion": "3.8.0.6134"
+          }
         }
       },
       "Azure.Core/1.35.0": {
@@ -57,14 +105,6 @@
           "lib/net6.0/Humanizer.dll": {
             "assemblyVersion": "2.14.0.0",
             "fileVersion": "2.14.1.48190"
-          }
-        }
-      },
-      "KdTree/1.4.1": {
-        "runtime": {
-          "lib/netcoreapp2.0/KdTreeLib.dll": {
-            "assemblyVersion": "1.4.1.0",
-            "fileVersion": "1.4.1.0"
           }
         }
       },
@@ -622,41 +662,41 @@
           }
         }
       },
-      "Swashbuckle.AspNetCore/6.7.1": {
+      "Swashbuckle.AspNetCore/6.7.2": {
         "dependencies": {
           "Microsoft.Extensions.ApiDescription.Server": "6.0.5",
-          "Swashbuckle.AspNetCore.Swagger": "6.7.1",
-          "Swashbuckle.AspNetCore.SwaggerGen": "6.7.1",
-          "Swashbuckle.AspNetCore.SwaggerUI": "6.7.1"
+          "Swashbuckle.AspNetCore.Swagger": "6.7.2",
+          "Swashbuckle.AspNetCore.SwaggerGen": "6.7.2",
+          "Swashbuckle.AspNetCore.SwaggerUI": "6.7.2"
         }
       },
-      "Swashbuckle.AspNetCore.Swagger/6.7.1": {
+      "Swashbuckle.AspNetCore.Swagger/6.7.2": {
         "dependencies": {
           "Microsoft.OpenApi": "1.6.14"
         },
         "runtime": {
           "lib/net8.0/Swashbuckle.AspNetCore.Swagger.dll": {
-            "assemblyVersion": "6.7.1.0",
-            "fileVersion": "6.7.1.644"
+            "assemblyVersion": "6.7.2.0",
+            "fileVersion": "6.7.2.666"
           }
         }
       },
-      "Swashbuckle.AspNetCore.SwaggerGen/6.7.1": {
+      "Swashbuckle.AspNetCore.SwaggerGen/6.7.2": {
         "dependencies": {
-          "Swashbuckle.AspNetCore.Swagger": "6.7.1"
+          "Swashbuckle.AspNetCore.Swagger": "6.7.2"
         },
         "runtime": {
           "lib/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll": {
-            "assemblyVersion": "6.7.1.0",
-            "fileVersion": "6.7.1.644"
+            "assemblyVersion": "6.7.2.0",
+            "fileVersion": "6.7.2.666"
           }
         }
       },
-      "Swashbuckle.AspNetCore.SwaggerUI/6.7.1": {
+      "Swashbuckle.AspNetCore.SwaggerUI/6.7.2": {
         "runtime": {
           "lib/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll": {
-            "assemblyVersion": "6.7.1.0",
-            "fileVersion": "6.7.1.644"
+            "assemblyVersion": "6.7.2.0",
+            "fileVersion": "6.7.2.666"
           }
         }
       },
@@ -922,6 +962,34 @@
       "serviceable": false,
       "sha512": ""
     },
+    "Accord/3.8.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7kJrB570dO5ELim+2KWQNozuvWO9/BuZfZspdFy36fcWPNF2CEccblLuILeUlI8QJYd2DlBy0bfK8BlCx/uayA==",
+      "path": "accord/3.8.0",
+      "hashPath": "accord.3.8.0.nupkg.sha512"
+    },
+    "Accord.MachineLearning/3.8.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6d8HY6/S4t5LBgD4YWrHISDX4q9s/caBu4fbHhq5RH2U4ETbtnDcvwgtsqGHKH1FyPylWFOniYjLO4B4xkEEuw==",
+      "path": "accord.machinelearning/3.8.0",
+      "hashPath": "accord.machinelearning.3.8.0.nupkg.sha512"
+    },
+    "Accord.Math/3.8.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-K3dzeQjDIrwRnoTRoMOoIbul2Uc0B8cnEtdrSlirmIo37C+jVkmYpJzme/z4Kg99XR2Vj5W5TTNlhjn+AKR+8A==",
+      "path": "accord.math/3.8.0",
+      "hashPath": "accord.math.3.8.0.nupkg.sha512"
+    },
+    "Accord.Statistics/3.8.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8WsmCE31Qdy3FmRvwtAY3F9/fJEi/6uyLQrhOvSI6pP6gpoaacmCrJRIphkGf2EB8gKHRWLAc4UXr1OOPHxkmQ==",
+      "path": "accord.statistics/3.8.0",
+      "hashPath": "accord.statistics.3.8.0.nupkg.sha512"
+    },
     "Azure.Core/1.35.0": {
       "type": "package",
       "serviceable": true,
@@ -942,13 +1010,6 @@
       "sha512": "sha512-lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw==",
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
-    },
-    "KdTree/1.4.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-yWbb35v/V9y88SLLMUPTlAN3pQEoPhDfZf9PApFnlU4kLtwVQ75U9vW5mW4/alQnLBuLKWBKcy4W5xK95mYsuA==",
-      "path": "kdtree/1.4.1",
-      "hashPath": "kdtree.1.4.1.nupkg.sha512"
     },
     "Microsoft.Bcl.AsyncInterfaces/6.0.0": {
       "type": "package",
@@ -1237,33 +1298,33 @@
       "path": "mono.texttemplating/2.2.1",
       "hashPath": "mono.texttemplating.2.2.1.nupkg.sha512"
     },
-    "Swashbuckle.AspNetCore/6.7.1": {
+    "Swashbuckle.AspNetCore/6.7.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-vLyorZI4TXvKlzC6uEMI9zXBe98wEBEu43wjpUayhqccFggryX94e+2iUjLtQFFDdDyx4f5xtF3afhRmOfQOdg==",
-      "path": "swashbuckle.aspnetcore/6.7.1",
-      "hashPath": "swashbuckle.aspnetcore.6.7.1.nupkg.sha512"
+      "sha512": "sha512-464D/dwPzHUE8gbj2DVOTY8SkITwu/S0KBfJFMWIfYVVJa7d/fFCm6yMK5KFzhaDqznClXFROwnP+R5Zyptz2g==",
+      "path": "swashbuckle.aspnetcore/6.7.2",
+      "hashPath": "swashbuckle.aspnetcore.6.7.2.nupkg.sha512"
     },
-    "Swashbuckle.AspNetCore.Swagger/6.7.1": {
+    "Swashbuckle.AspNetCore.Swagger/6.7.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-+inGEUziCH4qoAOnWxLYX+4ZjBTAj+Y74acJ5akLcPgNzk/qGHwQvt6nZq8Bgb3XmhsxDNMCIACc7iMbuG/h9Q==",
-      "path": "swashbuckle.aspnetcore.swagger/6.7.1",
-      "hashPath": "swashbuckle.aspnetcore.swagger.6.7.1.nupkg.sha512"
+      "sha512": "sha512-bFKfYjlHjnQFB1vbsIEhxPWlKx5dHuCAUXUxun1ZjqF5BNcV7fSunSpRKAx3fUGUZD76+KlPVhik3sTXqT9i8g==",
+      "path": "swashbuckle.aspnetcore.swagger/6.7.2",
+      "hashPath": "swashbuckle.aspnetcore.swagger.6.7.2.nupkg.sha512"
     },
-    "Swashbuckle.AspNetCore.SwaggerGen/6.7.1": {
+    "Swashbuckle.AspNetCore.SwaggerGen/6.7.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-iMtGuSAtzpvnLaqiqvPy453XaweX6hkTTY0ZXUvpkRNk++7fOBAFXX3/39kJ4F79qoRAd5XX8MXXBd0oic7N5Q==",
-      "path": "swashbuckle.aspnetcore.swaggergen/6.7.1",
-      "hashPath": "swashbuckle.aspnetcore.swaggergen.6.7.1.nupkg.sha512"
+      "sha512": "sha512-QWsO8lGWwHq3Xx8X96R/pjNvwvpuo02Mcu/kZlxgo/6UimYZNUaItrk7lp3zXFP864+/iMIT3EKPKdEWuW5zJw==",
+      "path": "swashbuckle.aspnetcore.swaggergen/6.7.2",
+      "hashPath": "swashbuckle.aspnetcore.swaggergen.6.7.2.nupkg.sha512"
     },
-    "Swashbuckle.AspNetCore.SwaggerUI/6.7.1": {
+    "Swashbuckle.AspNetCore.SwaggerUI/6.7.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-aJ/UfnrODbj/S3FDAnVQ7qz2txj7OcIXGu7ViXsi3bu3xMzhMcizVrH7T+utB2yWcPMBp0VMfc1nwRh77Ct1HQ==",
-      "path": "swashbuckle.aspnetcore.swaggerui/6.7.1",
-      "hashPath": "swashbuckle.aspnetcore.swaggerui.6.7.1.nupkg.sha512"
+      "sha512": "sha512-9zw5wMh75u2LX+FyvoX4vXPHi8sWUmzD2coY35OnFkTpA156aZpeaLf8u3URukjBWJKpBK+eENnWzTCc4z6lSA==",
+      "path": "swashbuckle.aspnetcore.swaggerui/6.7.2",
+      "hashPath": "swashbuckle.aspnetcore.swaggerui.6.7.2.nupkg.sha512"
     },
     "System.CodeDom/4.4.0": {
       "type": "package",

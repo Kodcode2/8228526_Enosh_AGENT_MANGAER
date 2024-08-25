@@ -14,7 +14,6 @@ namespace AgentsRest.Controllers
     public class TargetsController(
         ApplicationDbContext dbContext, 
         ITargetService targetService,
-        ILocationService locationService,
         ILogger<TargetsController> logger
     ) : ControllerBase
     {

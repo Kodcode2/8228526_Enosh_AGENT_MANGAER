@@ -106,6 +106,9 @@ namespace AgentsRest.Migrations
                     b.Property<int>("AgentId")
                         .HasColumnType("int");
 
+                    b.Property<double>("Distance")
+                        .HasColumnType("float");
+
                     b.Property<DateTime?>("ExecutionTime")
                         .HasColumnType("datetime2");
 

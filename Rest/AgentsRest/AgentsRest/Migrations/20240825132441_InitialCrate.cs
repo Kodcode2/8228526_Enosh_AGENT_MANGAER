@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AgentsRest.Migrations
 {
     /// <inheritdoc />
-    public partial class InitalCreate : Migration
+    public partial class InitialCrate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -80,6 +80,7 @@ namespace AgentsRest.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AgentId = table.Column<int>(type: "int", nullable: false),
                     TargetId = table.Column<int>(type: "int", nullable: false),
+                    Distance = table.Column<double>(type: "float", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LeftTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExecutionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
