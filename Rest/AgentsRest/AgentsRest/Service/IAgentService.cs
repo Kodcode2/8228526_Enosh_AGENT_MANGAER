@@ -6,7 +6,6 @@ namespace AgentsRest.Service
     public interface IAgentService
     {
         Task<AgentModel> CreateAgentAsync(AgentDto agentDto);
-        Task<AgentModel> UpdateAgentAsync(AgentDto agentDto);
         Task<AgentModel?> PlaceAgentAsync(int id, LocationDto locationDto);
         Task<AgentModel> MoveAgentAsync(int id, string direction);
         Task<AgentModel?> GetAgentByIdAsync(int id);

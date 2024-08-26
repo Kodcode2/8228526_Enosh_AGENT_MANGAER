@@ -6,6 +6,7 @@ using AgentsRest.Models;
 using AgentsRest.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Accord.Math.FourierTransform;
 
 namespace AgentsRest.Controllers
 {
@@ -79,13 +80,13 @@ namespace AgentsRest.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<LocationDto>> PinAgentAsync(int id, [FromBody] LocationDto locationDto) // does not work  yet !!!
+        public async Task<ActionResult<LocationDto>> PinAgentAsync(int id, [FromBody] LocationDto locationDto) 
         {
             try
             {
                 if (id == null || locationDto == null) { return BadRequest(); }
             
-                if (! await agentService.IsAgentExistAsync(id)) { return NotFound($"Agent with id {id} not found."); }
+                if (! await agentService.IsAgentExistAsync(id)) { return NotFound($"Agent with id: {id} not found."); }
 
                 AgentModel? agent = await agentService.PlaceAgentAsync(id, locationDto);
 
@@ -97,6 +98,33 @@ namespace AgentsRest.Controllers
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
                     $"An error occurred while fetching users. {ex.Message}"
+                );
+            }
+        }
+
+        [HttpPut("{id}/move")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<LocationDto>> MoveAgentAsync(int id, [FromBody] string direction)
+        {
+            try
+            {
+                if (!await agentService.IsAgentExistAsync(id))
+                { return NotFound($"Agent with id {id} does not exist."); } // return 404 if not exist
+
+                if (direction == null) { return BadRequest("Location not valid."); }
+
+                await agentService.MoveAgentAsync(id, direction);
+
+                return StatusCode(StatusCodes.Status204NoContent);
+            }
+            catch (Exception ex) // Handling exceptions
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    $"An error occurred while fetching Location set. {ex.Message}"
                 );
             }
         }

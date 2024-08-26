@@ -10,7 +10,6 @@ namespace AgentsRest.Utils
         public static LocationModel LocationDtoToModel(LocationDto locationDto) =>
             new LocationModel()
             {
-                Id = locationDto.Id,
                 X = locationDto.X,
                 Y = locationDto.Y,
             };
@@ -18,7 +17,6 @@ namespace AgentsRest.Utils
         public static LocationDto LocationModelToDto(LocationModel locationModel) =>
             new LocationDto()
             {
-                Id = locationModel.Id,
                 X = locationModel.X,
                 Y = locationModel.Y,
             };
@@ -28,8 +26,9 @@ namespace AgentsRest.Utils
             {
                 Id = agentDto.Id,
                 Nickname = agentDto.Nickname,
-                Location = LocationDtoToModel(agentDto.Location),
                 Status = agentDto.Status,
+                X = agentDto.X,
+                Y = agentDto.Y,
                 Image = agentDto.PhotoUrl,
                 Eliminations = agentDto.Eliminations,
                 //AgentsMissions = agentDto.AgentsMissions, //////////
@@ -40,8 +39,9 @@ namespace AgentsRest.Utils
             {
                 Id = agentModel.Id,
                 Nickname = agentModel.Nickname,
-                Location = LocationModelToDto(agentModel.Location),
                 Status = agentModel.Status,
+                X = agentModel.X,
+                Y = agentModel.Y,
                 PhotoUrl = agentModel.Image,
                 Eliminations = agentModel.Eliminations,
                 //AgentsMissions = agentModel.AgentsMissions, /////////
@@ -53,8 +53,9 @@ namespace AgentsRest.Utils
                 Id = targetDto.Id,
                 Name = targetDto.Name,
                 Role = targetDto.Position,
-                Location = LocationDtoToModel(targetDto.Location),
                 Status = targetDto.Status,
+                X = targetDto.X,
+                Y = targetDto.Y,
                 Image = targetDto.PhotoUrl,
                 IsDetected = targetDto.IsDetected,
             };
@@ -65,8 +66,9 @@ namespace AgentsRest.Utils
                 Id = targetModel.Id,
                 Name = targetModel.Name,
                 Position = targetModel.Role,
-                Location = LocationModelToDto(targetModel.Location),
                 Status = targetModel.Status,
+                X = targetModel.X,
+                Y = targetModel.Y,
                 PhotoUrl = targetModel.Image,
                 IsDetected = targetModel.IsDetected,
             };

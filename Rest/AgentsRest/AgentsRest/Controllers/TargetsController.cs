@@ -77,25 +77,26 @@ namespace AgentsRest.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> SetTargetLocation(int id, [FromBody] LocationDto locationDto)
+        public async Task<ActionResult> PinTargetLocation(int id, [FromBody] LocationDto location)
         {
             try
             {
-                if (!await targetService.IsTargetExistAsync(id)) 
-                { return NotFound($"Target with id {id} does not exist."); } // return 404 if not exist
+                if (id == null || location == null) { return BadRequest(); }
 
-                if (locationDto == null) { return BadRequest("Location not valid."); }
+                if (!await targetService.IsTargetExistAsync(id)) { return NotFound($"Agent with id: {id} not found."); }
 
-                await targetService.PlaceTargetAsync(id, locationDto);
-                return StatusCode(StatusCodes.Status204NoContent);
+                TargetModel? target = await targetService.PlaceTargetAsync(id, location);
+
+                return Ok(target);
             }
-            catch (Exception ex) // Handling exceptions
+            catch (Exception ex) 
             {
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
-                    $"An error occurred while fetching Location set. {ex.Message}"
+                    $"An error occurred while fetching users. {ex.Message}"
                 );
             }
+
         }
 
         [HttpPut("{id}/move")]

@@ -16,12 +16,13 @@ namespace AgentsRest.Models
 
         [Required]
         public required string Nickname { get; set; } = string.Empty;
-
-        [Required]
-        public required LocationModel Location { get; set; } = new LocationModel();
         
         [Required, EnumDataType(typeof(AgentStatus))]
         public required AgentStatus Status { get; set; } = AgentStatus.Inactive;
+
+        public int X { get; set; } = -1;
+
+        public int Y { get; set; } = -1;
 
         public string Image { get; set; } = 
             "https://stock.adobe.com/il/images/business-male-icon-simple-flat-design-concept/519881633";

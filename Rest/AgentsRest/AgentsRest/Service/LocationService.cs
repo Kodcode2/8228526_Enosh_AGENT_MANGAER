@@ -4,6 +4,7 @@ using AgentsRest.Models;
 using Microsoft.Extensions.DependencyInjection;
 using static AgentsRest.Utils.LocationUtil;
 using static AgentsRest.Utils.ConversionModelsUtil;
+using System.Reflection;
 
 namespace AgentsRest.Service
 {
@@ -20,15 +21,16 @@ namespace AgentsRest.Service
         {
             if (agent == null || direction == null) 
             { throw new Exception("Invalid input."); }
+            LocationModel cuurentLocation = new() { X = agent.X, Y = agent.Y };
 
-            LocationDto cuurentLocation = LocationModelToDto(agent.Location);
-
-            LocationDto? newLocation = GetNewLocation(cuurentLocation, direction);
+            LocationModel? newLocation = GetMove(cuurentLocation, direction);
 
             if (newLocation == null) { throw new Exception("Invalid new location."); }
 
-            agent.Location.X = newLocation.X;
-            agent.Location.Y = newLocation.Y;
+            AgentModel? agentModel = await dbContext.Agents.FindAsync(agent.Id);
+
+            agentModel.X += newLocation.X;
+            agentModel.Y += newLocation.Y;
             await dbContext.SaveChangesAsync();
 
             return agent;
@@ -39,14 +41,14 @@ namespace AgentsRest.Service
             if (target == null || direction == null) 
             { throw new Exception("Invalid input."); } 
 
-            LocationDto cuurentLocation = LocationModelToDto(target.Location);
+            LocationModel cuurentLocation = new() { X = target.X, Y = target.Y };
 
-            LocationDto? newLocation = GetNewLocation(cuurentLocation, direction);
+            LocationModel? newLocation = GetMove(cuurentLocation, direction);
 
             if (newLocation == null) { throw new Exception("Invalid new location."); }
 
-            target.Location.X = newLocation.X;
-            target.Location.Y = newLocation.Y;
+            target.X += newLocation.X;
+            target.Y += newLocation.Y;
             await dbContext.SaveChangesAsync();
 
             return target;

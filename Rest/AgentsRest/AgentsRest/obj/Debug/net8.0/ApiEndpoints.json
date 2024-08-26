@@ -101,6 +101,60 @@
   },
   {
     "ContainingType": "AgentsRest.Controllers.AgentsController",
+    "Method": "MoveAgentAsync",
+    "RelativePath": "Agents/{id}/move",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "direction",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "AgentsRest.Dto.LocationDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "AgentsRest.Controllers.AgentsController",
     "Method": "PinAgentAsync",
     "RelativePath": "Agents/{id}/pin",
     "HttpMethod": "PUT",
@@ -154,6 +208,52 @@
     ]
   },
   {
+    "ContainingType": "AgentsRest.Controllers.LoginController",
+    "Method": "Login",
+    "RelativePath": "Login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginDto",
+        "Type": "AgentsRest.Dto.LoginDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "AgentsRest.Controllers.LoginController",
+    "Method": "Protected",
+    "RelativePath": "Login/protected",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "AgentsRest.Controllers.MissionsController",
     "Method": "GetAllMissionsAsync",
     "RelativePath": "Missions",
@@ -170,6 +270,40 @@
           "text/json"
         ],
         "StatusCode": 200
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
+    "ContainingType": "AgentsRest.Controllers.MissionsController",
+    "Method": "UpdateAllMissions",
+    "RelativePath": "Missions",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "AgentsRest.Models.AgentModel",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
       },
       {
         "Type": "System.Void",
@@ -370,7 +504,7 @@
   },
   {
     "ContainingType": "AgentsRest.Controllers.TargetsController",
-    "Method": "SetTargetLocation",
+    "Method": "PinTargetLocation",
     "RelativePath": "Targets/{id}/pin",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -383,7 +517,7 @@
       },
       {
         "Name": "locationDto",
-        "Type": "AgentsRest.Dto.LocationDto",
+        "Type": "System.Object",
         "IsRequired": true
       }
     ],

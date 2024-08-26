@@ -9,12 +9,14 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using AgentsRest.Dto;
 using System.Reflection;
 using Accord.MachineLearning.Clustering;
+using AgentsRest.Controllers;
 
 namespace AgentsRest.Service
 {
     public class MissionService(
         ApplicationDbContext dbContext,
-        IServiceProvider serviceProvider
+        IServiceProvider serviceProvider,
+        ILogger<MissionStatus> logger
     ) : IMissionService
     {
         private IAgentService agentService => serviceProvider.GetRequiredService<IAgentService>();
@@ -41,6 +43,33 @@ namespace AgentsRest.Service
         public async Task<List<MissionModel>> GetAllMissionsAsync()
         {
             List<MissionModel> possibleMissions = await FindPossibleMissionsAsync();
+            if (possibleMissions == null || !possibleMissions.Any())
+            { return new List<MissionModel>(); }
+
+            var existingMissionsList = await dbContext.Missions
+                .Select(m => new { m.AgentId, m.TargetId })
+                .ToListAsync();
+
+            var existingMissionsSet = new HashSet<(int AgentId, int TargetId)>(
+                existingMissionsList.Select(m => (m.AgentId, m.TargetId))
+            );
+
+            List<MissionModel> newMissions = possibleMissions
+                .Where(m => !existingMissionsSet.Contains((m.AgentId, m.TargetId)))
+                .ToList();
+
+            if (newMissions.Any())
+            {
+                await dbContext.Missions.AddRangeAsync(newMissions);
+                await dbContext.SaveChangesAsync();
+            }
+
+            return await dbContext.Missions.ToListAsync();
+        }
+
+        /*public async Task<List<MissionModel>> GetAllMissionsAsync()
+        {
+            List<MissionModel> possibleMissions = await FindPossibleMissionsAsync();
 
             if (possibleMissions == null || !possibleMissions.Any()) { return new List<MissionModel>(); }
 
@@ -63,9 +92,45 @@ namespace AgentsRest.Service
             }
 
             return await dbContext.Missions.ToListAsync();
-        }
+        }*/
 
         public async Task<List<MissionModel>> FindPossibleMissionsAsync()
+        {
+            try
+            {
+                List<AgentModel> agents = await dbContext.Agents
+                    .Where(a => a.Status == AgentStatus.Inactive)
+                    .ToListAsync();
+
+                if (!agents.Any())
+                    throw new InvalidOperationException("No inactive agents available.");
+
+                List<TargetModel> targets = await dbContext.Targets
+                    .Where(t => t.Status == TargetStatus.Live)
+                    .ToListAsync();
+
+                if (!targets.Any())
+                    throw new InvalidOperationException("No live targets available.");
+
+                KDTree<PointWithIdModel> agentsTree = GenerateDormantAgentKDTree(AgentsToPoints(agents));
+
+                return targets.SelectMany(target =>
+                {
+                    Dictionary<int, double> potentialMissions = FindAgentPerTarget( agentsTree, new() { X = target.X, Y = target.Y } );
+                    return potentialMissions.Select(kvp =>
+                        CreateMission(target.Id, kvp.Key, kvp.Value)).ToList();
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred while finding possible missions.");
+                return new List<MissionModel>();
+            }
+        }
+
+
+
+        /*public async Task<List<MissionModel>> FindPossibleMissionsAsync()
         {
             try
             {
@@ -104,7 +169,7 @@ namespace AgentsRest.Service
                 Console.WriteLine(ex.Message);
                 return null;
             }
-        }
+        }*/
 
         public KDTree<PointWithIdModel> GenerateDormantAgentKDTree(List<PointWithIdModel> pointsAgents)
         {
@@ -164,7 +229,7 @@ namespace AgentsRest.Service
 
                 if (agent == null || target == null) return null;
 
-                if (await IsMissionLegal(agent, target))
+                if (IsMissionLegal(agent, target))
                 {
                     await ActivateMission(mission, agent);
                 }
@@ -178,15 +243,79 @@ namespace AgentsRest.Service
             }
         }
 
-        public async Task<bool> IsMissionLegal(AgentModel agent, TargetModel target)
+        public bool IsMissionLegal(AgentModel agent, TargetModel target) =>
+            IsInRange(agent, target) 
+            && agent.Status == AgentStatus.Inactive 
+            && target.Status == TargetStatus.Live;
+
+        public bool IsInRange(AgentModel agent, TargetModel target) =>
+            ComputeDistance(agent.X, agent.Y, target.X, target.Y) < 200
+            ? true : false;
+
+        public async Task<List<MissionModel>> UpdateAllMissionsAsync()
         {
+            List<MissionModel> activeMissions =
+                await dbContext.Missions
+                .Where(m => m.Status == MissionStatus.Assigned)
+                .ToListAsync();
 
-            if (IsInRange(agent, target)
-                && agent.Status == AgentStatus.Inactive
-                && target.Status == TargetStatus.Live)
-            {  return true; }
+            activeMissions.Where(m => !IsMissionLegal(m))
+                .ToList()
+                .ForEach(m => m.Status = MissionStatus.Canceled);
 
-            return false;
+            List<MissionModel> updatedActiveMissions = 
+                activeMissions.Where(m => m.Status == MissionStatus.Assigned)
+                .ToList();
+
+            updatedActiveMissions.ForEach(m => MoveAgentTowardsMission(m));
+            return updatedActiveMissions;
+        }
+
+        public async Task<LocationModel?> MoveAgentTowardsMission(MissionModel mission)
+        {
+            try
+            {
+                LocationModel targetLocation = new() { X = mission.Target.X, Y = mission.Target.Y };
+                LocationModel agentLocation = new() { X = mission.Agent.X, Y = mission.Agent.Y };
+
+                var (x, y) = MovePointTowards(
+                    mission.Target.X, mission.Target.Y, mission.Agent.X, mission.Agent.Y);
+
+                LocationModel newLocation =  new () { X = x, Y = y };
+
+                if (!IsLocationValid(x, y))
+                {
+                    throw new Exception($"Location X: {x}, Y: {y} out of range");
+                }
+
+                if (IsEliminated(targetLocation, newLocation))
+                {
+                    EliminationUpdate(mission);
+                }
+
+                AgentModel? agent = await dbContext.Agents.FindAsync(mission.AgentId);
+                if (agent != null) { throw new Exception(); }
+
+                agent.X = x;
+                agent.Y = y;
+                mission.Distance = ComputeDistance(agent.X, agent.Y, targetLocation.X, targetLocation.Y);
+                mission.EstimatedDuration = ComputeTimeLeft(mission.Distance);
+
+                await dbContext.HistoricalTimeLeft.AddAsync(
+                    new EstimatedDurationsModel()
+                    {
+                        MissionId = mission.Id,
+                        EstimatedDuration = mission.EstimatedDuration,
+                    });
+
+                await dbContext.SaveChangesAsync();
+                return newLocation;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
         }
 
         public bool IsMissionLegal(MissionModel mission)
@@ -202,20 +331,6 @@ namespace AgentsRest.Service
             { return true; }
 
             return false;
-        }
-
-        public bool IsInRange(AgentModel agent, TargetModel target)
-        {
-            LocationDto? locationTarget = LocationModelToDto(target.Location);
-
-            List<AgentModel> agentList = []; // Contain Only one agent!
-            List<PointWithIdModel> pointsAgent = AgentsToPoints(agentList);
-            KDTree<PointWithIdModel> agentNode = GenerateDormantAgentKDTree(pointsAgent);
-            Dictionary<int, double> agentDistanceRelative = FindAgentPerTarget(agentNode, locationTarget);
-
-            if (agentDistanceRelative.Count == 0) return false;
-
-            return true;
         }
 
         public async Task<bool> ActivateMission(MissionModel mission, AgentModel agent)
@@ -249,78 +364,6 @@ namespace AgentsRest.Service
             }
         }
 
-        public async Task<List<MissionModel>> UpdateAllMissionsAsync()
-        {
-            List<MissionModel> activeMissions =
-                await dbContext.Missions
-                .Where(m => m.Status == MissionStatus.Assigned)
-                .ToListAsync();
-
-            activeMissions.Where(m => !IsMissionLegal(m))
-                .ToList()
-                .ForEach(m => m.Status = MissionStatus.Canceled);
-
-            List<MissionModel> updateActiveMissions = 
-                activeMissions.Where(m => m.Status == MissionStatus.Assigned)
-                .ToList();
-
-            updateActiveMissions.ForEach(m => MoveAgentTowardsMission(m));
-            return updateActiveMissions;
-        }
-
-        public async Task<LocationModel?> MoveAgentTowardsMission(MissionModel mission)
-        {
-            try
-            {
-                LocationModel targetLocation = mission.Target.Location;
-                LocationModel agentLocation = mission.Agent.Location;
-
-                var (x, y) = MovePointTowards(
-                    targetLocation.X, targetLocation.Y, agentLocation.X, agentLocation.Y);
-
-                LocationModel newLocation =  new () { X = x, Y = y };
-
-                if (!IsLocationValid(x, y))
-                {
-                    throw new Exception($"Location X: {x}, Y: {y} out of range");
-                }
-
-                if (IsEliminated(targetLocation, newLocation))
-                {
-                    EliminationUpdate(mission);
-                }
-
-                AgentModel? agent = await dbContext.Agents.FindAsync(mission.AgentId);
-                if (agent != null) { throw new Exception(); }
-
-                agent.Location.X = x;
-                agent.Location.Y = y;
-                mission.Distance = ComputeDistance(agent.Location.X, agent.Location.Y, targetLocation.X, targetLocation.Y);
-                mission.EstimatedDuration = ComputeTimeLeft(mission.Distance);
-
-                await dbContext.HistoricalTimeLeft.AddAsync(
-                    new EstimatedDurationsModel()
-                    {
-                        MissionId = mission.Id,
-                        EstimatedDuration = mission.EstimatedDuration,
-                    });
-
-                await dbContext.SaveChangesAsync();
-                return newLocation;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-        }
-
-        public int ComputeDistance(int x1, int y1, int x2, int y2)
-        {
-            double distance = Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
-            return (int)Math.Round(distance);
-        }
-
         public async Task EliminationUpdate(MissionModel mission)
         {
             MissionModel? missionModel = await dbContext.Missions.FindAsync(mission.Id);
@@ -334,28 +377,6 @@ namespace AgentsRest.Service
 
             await dbContext.SaveChangesAsync();
         }
-
-        public bool IsEliminated(LocationModel targetLocation, LocationModel agentLocation) =>
-            agentLocation.X == targetLocation.X && agentLocation.Y == targetLocation.Y
-            ? true : false;
-
-        public static (int x, int y) MovePointTowards(int x1, int y1, int x2, int y2)
-        {
-            double distance = Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
-            if (distance == 0) return (x2, y2);
-
-            return ((int)Math.Round(x2 + (x1 - x2) / distance),
-                    (int)Math.Round(y2 + (y1 - y2) / distance));
-        }
-
-        public static (double x, double y) MovePointTowards(double x1, double y1, double x2, double y2)
-        {
-            double distance = Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
-            if (distance == 0) return (x2, y2);
-
-            return (x2 + (x1 - x2) / distance, y2 + (y1 - y2) / distance);
-        }
-
     }
 }
 

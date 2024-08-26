@@ -18,11 +18,12 @@ namespace AgentsRest.Models
 
         public string Role { get; set; } = string.Empty;
 
-        [Required]
-        public required LocationModel Location { get; set; } = new LocationModel();
-
         [Required, EnumDataType(typeof(TargetStatus))]
         public required TargetStatus Status { get; set; } = TargetStatus.Live;
+
+        public int X { get; set; } = -1;
+
+        public int Y { get; set; } = -1;
 
         [Required]
         public required bool IsDetected { get; set; } = false;

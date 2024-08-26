@@ -29,13 +29,9 @@ namespace AgentsRest.Utils
             && y < 1000
             ? true : false;
 
-        public static LocationDto? GetNewLocation(LocationDto currentLocation, string direction)
-        {
-           //  var (x, y) = (currentLocation.X, currentLocation.Y);
-           
-            // ['n','e','s','w'].select(d => +1 - 1 0)
-            
-            Dictionary<string, Func<LocationDto, (int x , int y)>> map = new() 
+        public static LocationModel? GetMove(LocationModel currentLocation, string direction)
+        {            
+            Dictionary<string, Func<LocationModel, (int x , int y)>> map = new() 
             {
                 {  "e", (location) => (0, 1) },
                 {  "w", (location) => (0, -1) },
@@ -53,6 +49,14 @@ namespace AgentsRest.Utils
 
             var (x, y) = map[direction](currentLocation);
 
+            return IsLocationValid(x, y) ? new LocationModel() { X = x, Y = y } : null;
+
+            
+
+            //  var (x, y) = (currentLocation.X, currentLocation.Y);
+           
+            // ['n','e','s','w'].select(d => +1 - 1 0)
+
 /*            (x, y) = direction switch
             {
                 "e" => (x, y++),
@@ -65,8 +69,6 @@ namespace AgentsRest.Utils
                 "se" => (x++, y++), "es" => (x++, y++),
                 _ => throw new Exception("Invalid command.")
             };*/
-
-            return IsLocationValid(x, y) ? new LocationDto(x, y) : null;
         }
     }
 }

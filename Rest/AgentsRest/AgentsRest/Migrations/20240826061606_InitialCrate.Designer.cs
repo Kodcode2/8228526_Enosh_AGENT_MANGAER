@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgentsRest.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240825154947_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240826061606_InitialCrate")]
+    partial class InitialCrate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,9 +40,6 @@ namespace AgentsRest.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LocationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nickname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -51,9 +48,13 @@ namespace AgentsRest.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<int>("X")
+                        .HasColumnType("int");
 
-                    b.HasIndex("LocationId");
+                    b.Property<int>("Y")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Agents");
                 });
@@ -77,25 +78,6 @@ namespace AgentsRest.Migrations
                     b.HasIndex("MissionId");
 
                     b.ToTable("HistoricalTimeLeft");
-                });
-
-            modelBuilder.Entity("AgentsRest.Models.LocationModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("X")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Y")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("AgentsRest.Models.MissionModel", b =>
@@ -152,9 +134,6 @@ namespace AgentsRest.Migrations
                     b.Property<bool>("IsDetected")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LocationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -167,22 +146,15 @@ namespace AgentsRest.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("X")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Y")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
-
                     b.ToTable("Targets");
-                });
-
-            modelBuilder.Entity("AgentsRest.Models.AgentModel", b =>
-                {
-                    b.HasOne("AgentsRest.Models.LocationModel", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("AgentsRest.Models.EstimatedDurationsModel", b =>
@@ -213,17 +185,6 @@ namespace AgentsRest.Migrations
                     b.Navigation("Agent");
 
                     b.Navigation("Target");
-                });
-
-            modelBuilder.Entity("AgentsRest.Models.TargetModel", b =>
-                {
-                    b.HasOne("AgentsRest.Models.LocationModel", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("AgentsRest.Models.AgentModel", b =>

@@ -16,7 +16,6 @@ namespace AgentsApi.Data
 
         public DbSet<AgentModel> Agents { get; set; }
         public DbSet<TargetModel> Targets { get; set; }
-        public DbSet<LocationModel> Locations { get; set; }
         public DbSet<MissionModel> Missions { get; set; }
         public DbSet<EstimatedDurationsModel> HistoricalTimeLeft { get; set; }
 

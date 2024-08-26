@@ -141,3 +141,4 @@ C:\Users\Simch\source\repos\AgentsExam\Rest\AgentsRest\AgentsRest\bin\Debug\net8
 C:\Users\Simch\source\repos\AgentsExam\Rest\AgentsRest\AgentsRest\bin\Debug\net8.0\Accord.Math.Core.dll
 C:\Users\Simch\source\repos\AgentsExam\Rest\AgentsRest\AgentsRest\bin\Debug\net8.0\Accord.Math.dll
 C:\Users\Simch\source\repos\AgentsExam\Rest\AgentsRest\AgentsRest\bin\Debug\net8.0\Accord.Statistics.dll
+C:\Users\Simch\source\repos\AgentsExam\Rest\AgentsRest\AgentsRest\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
