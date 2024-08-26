@@ -23,7 +23,7 @@ namespace AgentsApi.Data
         {
             modelBuilder.Entity<MissionModel>()
                 .HasOne(m => m.Agent) // Link each mission to Agent
-                .WithMany(a => a.AgentsMissions) // Link the Agent to List of missions
+                .WithMany() // Link the Agent to List of missions // H: a => a.AgentsMissions
                 .HasForeignKey(m => m.AgentId) // Defining a Foreign key between the mission and the agent
                 .OnDelete(DeleteBehavior.Restrict); // Restricting the deletion of shared information
 

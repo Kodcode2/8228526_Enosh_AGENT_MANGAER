@@ -6,6 +6,7 @@ using AgentsRest.Models;
 using AgentsRest.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using static Accord.Math.FourierTransform;
 
 namespace AgentsRest.Controllers
@@ -107,7 +108,7 @@ namespace AgentsRest.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<LocationDto>> MoveAgentAsync(int id, [FromBody] string direction)
+        public async Task<ActionResult> MoveAgentAsync(int id, [FromBody] DirectionDto direction)
         {
             try
             {
@@ -116,7 +117,7 @@ namespace AgentsRest.Controllers
 
                 if (direction == null) { return BadRequest("Location not valid."); }
 
-                await agentService.MoveAgentAsync(id, direction);
+                await agentService.MoveAgentAsync(id, direction.Direction);
 
                 return StatusCode(StatusCodes.Status204NoContent);
             }

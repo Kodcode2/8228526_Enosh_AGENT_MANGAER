@@ -103,7 +103,7 @@ namespace AgentsRest.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> MoveTargetLocation(int id, [FromBody] string direction)
+        public async Task<ActionResult> MoveTargetLocation(int id, [FromBody] DirectionDto direction)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace AgentsRest.Controllers
 
                 // if (locationDto == null) { return BadRequest("Location not valid."); }
 
-                await targetService.MoveTargetAsync(id, direction);
+                await targetService.MoveTargetAsync(id, direction.Direction);
 
                 return StatusCode(StatusCodes.Status204NoContent);
             }

@@ -15,6 +15,6 @@ namespace AgentsRest.Dto
         public int X { get; set; }
         public int Y { get; set; }
         public string? PhotoUrl { get; set; }
-        public bool IsDetected { get; set; } = false;
+        public bool IsDetected { get; set; }
     }
 }

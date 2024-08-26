@@ -1,15 +1,11 @@
 ﻿using AgentsRest.Models;
 using static AgentsRest.Utils.MissionUtil;
 using static AgentsRest.Utils.LocationUtil;
-using static AgentsRest.Utils.ConversionModelsUtil;
 using Accord.Collections;
 using AgentsApi.Data;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using AgentsRest.Dto;
-using System.Reflection;
-using Accord.MachineLearning.Clustering;
-using AgentsRest.Controllers;
+
 
 namespace AgentsRest.Service
 {
@@ -23,76 +19,49 @@ namespace AgentsRest.Service
         private ITargetService targetService => serviceProvider.GetRequiredService<ITargetService>();
         private ILocationService locationService => serviceProvider.GetRequiredService<ILocationService>();
 
-        public async Task<MissionModel?> GetMissionByIdAsync(int missionId)
+        public async Task<List<MissionModel>> UpdateAllMissionsAsync()
         {
-            try
-            {
-                MissionModel? mission = await dbContext.Missions.FindAsync(missionId);
+            List<MissionModel> activeMissions =
+                await dbContext.Missions
+                .Where(m => m.Status == MissionStatus.Assigned)
+                .ToListAsync();
 
-                if (mission == null) { throw new Exception("Mission not exists."); }
+            activeMissions.Where(m => !IsMissionLegal(m))
+                .ToList()
+                .ForEach(m => m.Status = MissionStatus.Canceled);
 
-                return mission;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
+            List<MissionModel> updatedActiveMissions =
+                activeMissions.Where(m => m.Status == MissionStatus.Assigned)
+                .ToList();
+
+            updatedActiveMissions.ForEach(m => MoveAgentTowardsMission(m));
+            return updatedActiveMissions;
         }
 
         public async Task<List<MissionModel>> GetAllMissionsAsync()
         {
             List<MissionModel> possibleMissions = await FindPossibleMissionsAsync();
-            if (possibleMissions == null || !possibleMissions.Any())
-            { return new List<MissionModel>(); }
 
-            var existingMissionsList = await dbContext.Missions
-                .Select(m => new { m.AgentId, m.TargetId })
-                .ToListAsync();
+            if (possibleMissions == null || !possibleMissions.Any()) { return new List<MissionModel>(); }
 
-            var existingMissionsSet = new HashSet<(int AgentId, int TargetId)>(
-                existingMissionsList.Select(m => (m.AgentId, m.TargetId))
-            );
+            List<MissionModel> existingMissions = await dbContext.Missions.ToListAsync();
 
-            List<MissionModel> newMissions = possibleMissions
-                .Where(m => !existingMissionsSet.Contains((m.AgentId, m.TargetId)))
+            List<MissionModel> filteredMissions = possibleMissions
+                .Where(newMission => 
+                    !existingMissions.Any(existMission => 
+                        IsMissionsTheSame(newMission, existMission)
+                    )
+                )
                 .ToList();
 
-            if (newMissions.Any())
+            if (filteredMissions.Any())
             {
-                await dbContext.Missions.AddRangeAsync(newMissions);
+                await dbContext.Missions.AddRangeAsync(filteredMissions);
                 await dbContext.SaveChangesAsync();
             }
 
             return await dbContext.Missions.ToListAsync();
         }
-
-        /*public async Task<List<MissionModel>> GetAllMissionsAsync()
-        {
-            List<MissionModel> possibleMissions = await FindPossibleMissionsAsync();
-
-            if (possibleMissions == null || !possibleMissions.Any()) { return new List<MissionModel>(); }
-
-            var existingMissions = await dbContext.Missions
-                .Select(m => new { m.AgentId, m.TargetId })
-                .ToListAsync();
-
-            var existingMissionsSet = new HashSet<(int AgentId, int TargetId)>(
-                existingMissions.Select(m => (m.AgentId, m.TargetId))
-            );
-
-            var newMissions = possibleMissions
-                .Where(m => !existingMissionsSet.Contains((m.AgentId, m.TargetId)))
-                .ToList();
-
-            if (newMissions.Any())
-            {
-                await dbContext.Missions.AddRangeAsync(newMissions);
-                await dbContext.SaveChangesAsync();
-            }
-
-            return await dbContext.Missions.ToListAsync();
-        }*/
 
         public async Task<List<MissionModel>> FindPossibleMissionsAsync()
         {
@@ -116,10 +85,10 @@ namespace AgentsRest.Service
 
                 return targets.SelectMany(target =>
                 {
-                    Dictionary<int, double> potentialMissions = FindAgentPerTarget( agentsTree, new() { X = target.X, Y = target.Y } );
-                    return potentialMissions.Select(kvp =>
-                        CreateMission(target.Id, kvp.Key, kvp.Value)).ToList();
+                    Dictionary<int, double> potentialMissions = FindAgentPerTarget(agentsTree, new LocationDto { X = target.X, Y = target.Y });
+                    return potentialMissions.Select(kvp => CreateMission(target.Id, kvp.Key, kvp.Value)).ToList();
                 }).ToList();
+
             }
             catch (Exception ex)
             {
@@ -127,49 +96,6 @@ namespace AgentsRest.Service
                 return new List<MissionModel>();
             }
         }
-
-
-
-        /*public async Task<List<MissionModel>> FindPossibleMissionsAsync()
-        {
-            try
-            {
-                List<MissionModel> missions = new();
-
-                List<AgentModel> agents = await dbContext.Agents.Where(a => a.Status == AgentStatus.Inactive).ToListAsync();
-
-                if (agents == null || agents.Count == 0) { throw new Exception("Agents is null or empty."); }
-
-                List<PointWithIdModel> pointsAgents = AgentsToPoints(agents);
-
-                List<TargetModel> targets = await dbContext.Targets.Where(t => t.Status == TargetStatus.Live).ToListAsync();
-
-                if (targets == null || targets.Count == 0) { throw new Exception("Targets is null or empty."); }
-
-                KDTree<PointWithIdModel> agentsTree = GenerateDormantAgentKDTree(pointsAgents);
-
-                if (agentsTree == null || agentsTree.Count == 0) { throw new Exception("AgentsTree is null or empty."); }
-
-
-                foreach (var target in targets)
-                {
-                    Dictionary<int, double> potentialMissions = FindAgentPerTarget(agentsTree, LocationModelToDto(target.Location));
-                    foreach (var kvp in potentialMissions)
-                    {
-                        int agentId = kvp.Key;
-                        double distance = kvp.Value;
-                        var mission = CreateMission(target.Id, agentId, distance);
-                        missions.Add(mission);
-                    }
-                }
-                return missions;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-        }*/
 
         public KDTree<PointWithIdModel> GenerateDormantAgentKDTree(List<PointWithIdModel> pointsAgents)
         {
@@ -191,7 +117,7 @@ namespace AgentsRest.Service
             var nearestAgents = agentsTree.Nearest(
                 position: targetQuery,
                 radius: maxDistance,
-                maximum: int.MaxValue
+                maximum: 10 // int.MaxValue
             );
 
             return nearestAgents
@@ -202,19 +128,14 @@ namespace AgentsRest.Service
                 );
         }
 
-        public List<PointWithIdModel> AgentsToPoints(List<AgentModel> agents) =>
-            agents.Select(AgentToPointWithId).ToList();
-
         public MissionModel CreateMission(int targetId, int agentId, double distance) =>
             new MissionModel()
             {
                 AgentId = agentId,
                 TargetId = targetId,
-                Distance = distance
+                Distance = distance,
+                EstimatedDuration = ComputeTimeLeft(distance)
             };
-
-        public async Task<bool> IsMissionExistAsync(int id) =>
-            await dbContext.Missions.AnyAsync(m => m.Id == id);
 
         public async Task<MissionModel?> AllocateMissionAsync(int missionId)
         {
@@ -229,7 +150,7 @@ namespace AgentsRest.Service
 
                 if (agent == null || target == null) return null;
 
-                if (IsMissionLegal(agent, target))
+                if (IsAllocateLegal(agent, target))
                 {
                     await ActivateMission(mission, agent);
                 }
@@ -241,34 +162,6 @@ namespace AgentsRest.Service
                 Console.WriteLine(ex.Message);
                 return null;
             }
-        }
-
-        public bool IsMissionLegal(AgentModel agent, TargetModel target) =>
-            IsInRange(agent, target) 
-            && agent.Status == AgentStatus.Inactive 
-            && target.Status == TargetStatus.Live;
-
-        public bool IsInRange(AgentModel agent, TargetModel target) =>
-            ComputeDistance(agent.X, agent.Y, target.X, target.Y) < 200
-            ? true : false;
-
-        public async Task<List<MissionModel>> UpdateAllMissionsAsync()
-        {
-            List<MissionModel> activeMissions =
-                await dbContext.Missions
-                .Where(m => m.Status == MissionStatus.Assigned)
-                .ToListAsync();
-
-            activeMissions.Where(m => !IsMissionLegal(m))
-                .ToList()
-                .ForEach(m => m.Status = MissionStatus.Canceled);
-
-            List<MissionModel> updatedActiveMissions = 
-                activeMissions.Where(m => m.Status == MissionStatus.Assigned)
-                .ToList();
-
-            updatedActiveMissions.ForEach(m => MoveAgentTowardsMission(m));
-            return updatedActiveMissions;
         }
 
         public async Task<LocationModel?> MoveAgentTowardsMission(MissionModel mission)
@@ -318,21 +211,6 @@ namespace AgentsRest.Service
             }
         }
 
-        public bool IsMissionLegal(MissionModel mission)
-        {
-            AgentModel? agent = dbContext.Agents.Find(mission.AgentId);
-            TargetModel? target = dbContext.Targets.Find(mission.TargetId);
-
-            if (agent == null || target == null) { return false; }
-
-            if (IsInRange(agent, target)
-                && agent.Status == AgentStatus.Inactive
-                && target.Status == TargetStatus.Live)
-            { return true; }
-
-            return false;
-        }
-
         public async Task<bool> ActivateMission(MissionModel mission, AgentModel agent)
         {
             try
@@ -364,6 +242,9 @@ namespace AgentsRest.Service
             }
         }
 
+        public bool IsMissionsTheSame(MissionModel comparer, MissionModel second) =>
+            comparer.AgentId == second.AgentId && comparer.TargetId == second.TargetId;
+
         public async Task EliminationUpdate(MissionModel mission)
         {
             MissionModel? missionModel = await dbContext.Missions.FindAsync(mission.Id);
@@ -377,6 +258,37 @@ namespace AgentsRest.Service
 
             await dbContext.SaveChangesAsync();
         }
+
+        public List<PointWithIdModel> AgentsToPoints(List<AgentModel> agents) =>
+            agents.Select(AgentToPointWithId).ToList();
+
+        public async Task<bool> IsMissionExistAsync(int id) =>
+            await dbContext.Missions.AnyAsync(m => m.Id == id);
+
+        public async Task<MissionModel?> GetMissionByIdAsync(int missionId) =>
+            await dbContext.Missions.FindAsync(missionId);
+
+        public bool IsAllocateLegal(AgentModel agent, TargetModel target) =>
+            IsInRange(agent, target)
+            && agent.Status == AgentStatus.Inactive
+            && target.Status == TargetStatus.Live;
+
+        public bool IsMissionLegal(MissionModel mission)
+        {
+            AgentModel? agent = dbContext.Agents.Find(mission.AgentId);
+            TargetModel? target = dbContext.Targets.Find(mission.TargetId);
+
+            if (agent == null || target == null) { return false; }
+
+            if (IsInRange(agent, target)
+                && agent.Status == AgentStatus.Inactive
+                && target.Status == TargetStatus.Live)
+            { return true; }
+
+            return false;
+        }
+
+        public bool IsInRange(AgentModel agent, TargetModel target) =>
+            ComputeDistance(agent.X, agent.Y, target.X, target.Y) < 200;
     }
 }
-

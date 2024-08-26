@@ -44,18 +44,15 @@ namespace AgentsRest.Controllers
             {
                 if (id == null) { return BadRequest(); }
 
-                if (!await missionService.IsMissionExistAsync(id)) { return NotFound($"Mission with id {id} not found."); }
-
-
-
                 MissionModel? mission = await missionService.GetMissionByIdAsync(id);
 
-                if (mission == null) { throw new Exception("Mission not exists."); }
+                if (mission == null) { return NotFound($"Mission with id {id} not found."); }
+
+                await missionService.AllocateMissionAsync(id);
 
                 return Ok(mission);
-
             }
-            catch (Exception ex) // Handling exceptions
+            catch (Exception ex) 
             {
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,

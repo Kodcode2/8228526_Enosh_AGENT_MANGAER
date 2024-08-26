@@ -17,41 +17,26 @@ namespace AgentsRest.Service
         private ITargetService targetService => serviceProvider.GetRequiredService<ITargetService>();
         private IMissionService missionService => serviceProvider.GetRequiredService<IMissionService>();
 
-        public async Task<AgentModel?> MoveLocationAsync(AgentModel agent, string direction)
+        public async Task<T?> MoveLocationAsync<T>(T location, string direction) where T : class, ILocationModel 
         {
-            if (agent == null || direction == null) 
-            { throw new Exception("Invalid input."); }
-            LocationModel cuurentLocation = new() { X = agent.X, Y = agent.Y };
+            if (location == null || direction == null)
+            {
+                return default;
+            }
 
-            LocationModel? newLocation = GetMove(cuurentLocation, direction);
+            LocationModel currentLocation = new() { X = location.X, Y = location.Y };
+            LocationModel? newLocation = GetMove(currentLocation, direction);
 
-            if (newLocation == null) { throw new Exception("Invalid new location."); }
+            if (newLocation == null)
+            {
+                return null;
+            }
 
-            AgentModel? agentModel = await dbContext.Agents.FindAsync(agent.Id);
-
-            agentModel.X += newLocation.X;
-            agentModel.Y += newLocation.Y;
+            location.X = newLocation.X;
+            location.Y = newLocation.Y;
             await dbContext.SaveChangesAsync();
 
-            return agent;
-        }
-
-        public async Task<TargetModel?> MoveLocationAsync(TargetModel target, string direction)
-        {
-            if (target == null || direction == null) 
-            { throw new Exception("Invalid input."); } 
-
-            LocationModel cuurentLocation = new() { X = target.X, Y = target.Y };
-
-            LocationModel? newLocation = GetMove(cuurentLocation, direction);
-
-            if (newLocation == null) { throw new Exception("Invalid new location."); }
-
-            target.X += newLocation.X;
-            target.Y += newLocation.Y;
-            await dbContext.SaveChangesAsync();
-
-            return target;
+            return location;
         }
     }
 }

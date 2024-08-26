@@ -4,7 +4,6 @@ namespace AgentsRest.Service
 {
     public interface ILocationService
     {
-        Task<AgentModel?> MoveLocationAsync(AgentModel agent, string direction);
-        Task<TargetModel?> MoveLocationAsync(TargetModel target, string direction);
+        Task<T?> MoveLocationAsync<T>(T location, string direction) where T : class, ILocationModel;
     }
 }

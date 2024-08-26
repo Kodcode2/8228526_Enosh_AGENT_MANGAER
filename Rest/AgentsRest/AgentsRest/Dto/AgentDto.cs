@@ -15,6 +15,6 @@ namespace AgentsRest.Dto
         public int X { get; set; } 
         public int Y { get; set; } 
         public string? PhotoUrl { get; set; }
-        public int Eliminations { get; set; } = 0;
+        public int Eliminations { get; set; } 
     }
 }

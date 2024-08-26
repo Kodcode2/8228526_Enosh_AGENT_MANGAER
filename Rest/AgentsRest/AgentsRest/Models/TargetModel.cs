@@ -8,7 +8,7 @@ namespace AgentsRest.Models
         Dead
     }
 
-    public class TargetModel
+    public class TargetModel : ILocationModel
     {
         [Key]
         public int Id { get; set; }

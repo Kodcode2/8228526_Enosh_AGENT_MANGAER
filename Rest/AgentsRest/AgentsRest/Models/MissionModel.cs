@@ -9,7 +9,6 @@ namespace AgentsRest.Models
         Assigned, 
         Completed,
         Canceled
-
     }
 
     public class MissionModel
@@ -25,7 +24,7 @@ namespace AgentsRest.Models
 
         public double Distance { get; set; }
 
-        public DateTime StartTime { get; set; } = DateTime.Now;
+        public DateTime StartTime { get; set; } 
 
         public double EstimatedDuration { get; set; }
 

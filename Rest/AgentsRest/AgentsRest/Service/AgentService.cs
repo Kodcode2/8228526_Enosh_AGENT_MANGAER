@@ -27,45 +27,13 @@ namespace AgentsRest.Service
             {
                 if (agentDto == null) { throw new ArgumentNullException(nameof(agentDto)); } // Handling null input
 
-                AgentModel agentModel = AgentDtoToModel(agentDto); // Convert Dto to Model
+                AgentModel agent = AgentDtoToModel(agentDto); // Convert Dto to Model
 
-                agentModel.X = -1; agentModel.Y = -1;
+                agent.X = -1; agent.Y = -1;
+                agent.Status = AgentStatus.Inactive;
 
-                await dbContext.AddAsync(agentModel); // Add Agent to DbContext
+                await dbContext.AddAsync(agent); // Add Agent to DbContext
                 await dbContext.SaveChangesAsync();
-
-                return agentModel;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-        }
-
-        /*// Get Agent by id, if not exists throw error
-        public async Task<AgentModel> GetAgentById(int id) =>
-            await dbContext.Agents.FindAsync(id)
-            ?? throw new Exception($"Agent with id {id} does not exists.");*/
-
-        public async Task<AgentModel?> PlaceAgentAsync(int agentId, LocationDto location)
-        {
-            try
-            {
-                if (location == null) { throw new ArgumentNullException(nameof(location)); } // Handling null input
-
-                AgentModel? agent = await dbContext.Agents.FindAsync(agentId);
-
-                if (agent == null) { return null; }
-
-                if (!IsLocationValid(location.X, location.Y))
-                { throw new Exception($"Location X: {location.X}, Y: {location.Y}, not valid."); }
-
-                agent.X = location.X;
-                agent.Y = location.Y;
-                await dbContext.SaveChangesAsync();
-
-                await missionService.GetAllMissionsAsync();
 
                 return agent;
             }
@@ -76,26 +44,31 @@ namespace AgentsRest.Service
             }
         }
 
+        public async Task<AgentModel?> PlaceAgentAsync(int agentId, LocationDto location)
+        {
+            if (location == null || !IsLocationValid(location.X, location.Y)) { return null; }
+
+            AgentModel? agent = await GetAgentByIdAsync(agentId);
+            if (agent == null) return null;
+
+            agent.X = location.X;
+            agent.Y = location.Y;
+            await dbContext.SaveChangesAsync();
+
+            await missionService.GetAllMissionsAsync(); // After updating a new location, performing a possible task check
+            return agent;
+        }
+
         public async Task<AgentModel?> MoveAgentAsync(int id, string direction)
-            {
-                try
-                {
-                    AgentModel agent = await GetAgentByIdAsync(id)
-                        ?? throw new Exception("Agent not found.");
+        {
+            AgentModel? agent = await GetAgentByIdAsync(id);
+            if (agent == null || string.IsNullOrEmpty(direction)) { return null; };
 
-                    await locationService.MoveLocationAsync(agent, direction);
+            await locationService.MoveLocationAsync(agent, direction); 
 
-                    await missionService.GetAllMissionsAsync();
-
-                    return agent;
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                    return null;
-                }
-            }
+            await missionService.GetAllMissionsAsync(); // After updating a new location, performing a possible task check
+            return agent;
+        }
 
         // Get All Agents (If there are no Agents return empty list)
         public async Task<List<AgentModel>> GetAllAgentsAsync() =>
@@ -103,8 +76,7 @@ namespace AgentsRest.Service
 
         // Get Agent by id, if not exists throw error
         public async Task<AgentModel?> GetAgentByIdAsync(int id) =>
-            await dbContext.Agents.FindAsync(id)
-            ?? null;
+            await dbContext.Agents.FindAsync(id);
 
         public async Task<bool> IsAgentExistAsync(int id) =>
             await dbContext.Agents.AnyAsync(a => a.Id == id);

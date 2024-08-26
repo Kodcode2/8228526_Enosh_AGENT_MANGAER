@@ -1,0 +1,122 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Simch\\source\\repos\\AgentsExam\\Mvc\\MVCServer\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B420012D-180D-4929-AFA4-E55E8E5646DF}|MVCServer\\MVCServer.csproj|c:\\users\\simch\\source\\repos\\agentsexam\\mvc\\mvcserver\\mvcserver\\service\\missionsviewservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B420012D-180D-4929-AFA4-E55E8E5646DF}|MVCServer\\MVCServer.csproj|solutionrelative:mvcserver\\service\\missionsviewservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B420012D-180D-4929-AFA4-E55E8E5646DF}|MVCServer\\MVCServer.csproj|c:\\users\\simch\\source\\repos\\agentsexam\\mvc\\mvcserver\\mvcserver\\views\\missionsview\\assignmission.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B420012D-180D-4929-AFA4-E55E8E5646DF}|MVCServer\\MVCServer.csproj|solutionrelative:mvcserver\\views\\missionsview\\assignmission.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B420012D-180D-4929-AFA4-E55E8E5646DF}|MVCServer\\MVCServer.csproj|c:\\users\\simch\\source\\repos\\agentsexam\\mvc\\mvcserver\\mvcserver\\controllers\\missionsviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B420012D-180D-4929-AFA4-E55E8E5646DF}|MVCServer\\MVCServer.csproj|solutionrelative:mvcserver\\controllers\\missionsviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B420012D-180D-4929-AFA4-E55E8E5646DF}|MVCServer\\MVCServer.csproj|c:\\users\\simch\\source\\repos\\agentsexam\\mvc\\mvcserver\\mvcserver\\views\\missionsview\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{B420012D-180D-4929-AFA4-E55E8E5646DF}|MVCServer\\MVCServer.csproj|solutionrelative:mvcserver\\views\\missionsview\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B420012D-180D-4929-AFA4-E55E8E5646DF}|MVCServer\\MVCServer.csproj|c:\\users\\simch\\source\\repos\\agentsexam\\mvc\\mvcserver\\mvcserver\\controllers\\targetsviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B420012D-180D-4929-AFA4-E55E8E5646DF}|MVCServer\\MVCServer.csproj|solutionrelative:mvcserver\\controllers\\targetsviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B420012D-180D-4929-AFA4-E55E8E5646DF}|MVCServer\\MVCServer.csproj|c:\\users\\simch\\source\\repos\\agentsexam\\mvc\\mvcserver\\mvcserver\\controllers\\agentsviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B420012D-180D-4929-AFA4-E55E8E5646DF}|MVCServer\\MVCServer.csproj|solutionrelative:mvcserver\\controllers\\agentsviewcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AssignMission.cshtml",
+              "DocumentMoniker": "C:\\Users\\Simch\\source\\repos\\AgentsExam\\Mvc\\MVCServer\\MVCServer\\Views\\MissionsView\\AssignMission.cshtml",
+              "RelativeDocumentMoniker": "MVCServer\\Views\\MissionsView\\AssignMission.cshtml",
+              "ToolTip": "C:\\Users\\Simch\\source\\repos\\AgentsExam\\Mvc\\MVCServer\\MVCServer\\Views\\MissionsView\\AssignMission.cshtml",
+              "RelativeToolTip": "MVCServer\\Views\\MissionsView\\AssignMission.cshtml",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-26T15:05:20.58Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MissionsViewService.cs",
+              "DocumentMoniker": "C:\\Users\\Simch\\source\\repos\\AgentsExam\\Mvc\\MVCServer\\MVCServer\\Service\\MissionsViewService.cs",
+              "RelativeDocumentMoniker": "MVCServer\\Service\\MissionsViewService.cs",
+              "ToolTip": "C:\\Users\\Simch\\source\\repos\\AgentsExam\\Mvc\\MVCServer\\MVCServer\\Service\\MissionsViewService.cs",
+              "RelativeToolTip": "MVCServer\\Service\\MissionsViewService.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAYwCgAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-26T14:01:02.689Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Simch\\source\\repos\\AgentsExam\\Mvc\\MVCServer\\MVCServer\\Views\\MissionsView\\Index.cshtml",
+              "RelativeDocumentMoniker": "MVCServer\\Views\\MissionsView\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Simch\\source\\repos\\AgentsExam\\Mvc\\MVCServer\\MVCServer\\Views\\MissionsView\\Index.cshtml",
+              "RelativeToolTip": "MVCServer\\Views\\MissionsView\\Index.cshtml",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAAADIAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-26T14:25:44.14Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MissionsViewController.cs",
+              "DocumentMoniker": "C:\\Users\\Simch\\source\\repos\\AgentsExam\\Mvc\\MVCServer\\MVCServer\\Controllers\\MissionsViewController.cs",
+              "RelativeDocumentMoniker": "MVCServer\\Controllers\\MissionsViewController.cs",
+              "ToolTip": "C:\\Users\\Simch\\source\\repos\\AgentsExam\\Mvc\\MVCServer\\MVCServer\\Controllers\\MissionsViewController.cs",
+              "RelativeToolTip": "MVCServer\\Controllers\\MissionsViewController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-26T13:54:13.33Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AgentsViewController.cs",
+              "DocumentMoniker": "C:\\Users\\Simch\\source\\repos\\AgentsExam\\Mvc\\MVCServer\\MVCServer\\Controllers\\AgentsViewController.cs",
+              "RelativeDocumentMoniker": "MVCServer\\Controllers\\AgentsViewController.cs",
+              "ToolTip": "C:\\Users\\Simch\\source\\repos\\AgentsExam\\Mvc\\MVCServer\\MVCServer\\Controllers\\AgentsViewController.cs",
+              "RelativeToolTip": "MVCServer\\Controllers\\AgentsViewController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-26T13:54:04.799Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "TargetsViewController.cs",
+              "DocumentMoniker": "C:\\Users\\Simch\\source\\repos\\AgentsExam\\Mvc\\MVCServer\\MVCServer\\Controllers\\TargetsViewController.cs",
+              "RelativeDocumentMoniker": "MVCServer\\Controllers\\TargetsViewController.cs",
+              "ToolTip": "C:\\Users\\Simch\\source\\repos\\AgentsExam\\Mvc\\MVCServer\\MVCServer\\Controllers\\TargetsViewController.cs",
+              "RelativeToolTip": "MVCServer\\Controllers\\TargetsViewController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-26T13:04:23.33Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

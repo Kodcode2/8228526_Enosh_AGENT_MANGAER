@@ -1,0 +1,88 @@
+﻿@model IEnumerable<MVCServer.ViewModels.MissionVM>
+
+@{
+    ViewData["Title"] = "Missions Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @* @Html.DisplayNameFor(model => model.Token) *@
+                Assign
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AgentId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TargetId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Distance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstimatedDuration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExecutionTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @* @Html.DisplayFor(modelItem => item.Token) *@
+                    @if (item.Status.ToString() == "Proposal")
+                {
+                        @Html.ActionLink("Assign", "AssignMission", new { id = item.Id })
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AgentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TargetId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Distance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstimatedDuration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExecutionTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

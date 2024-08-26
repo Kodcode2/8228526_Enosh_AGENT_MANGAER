@@ -15,6 +15,6 @@ namespace AgentsRest.Dto
         public DateTime StartTime { get; set; }
         public double EstimatedDuration { get; set; }
         public DateTime? ExecutionTime { get; set; }
-        public MissionStatus Status { get; set; } = MissionStatus.Proposal;
+        public MissionStatus Status { get; set; } 
     }
 }

@@ -49,26 +49,13 @@ namespace AgentsRest.Utils
 
             var (x, y) = map[direction](currentLocation);
 
-            return IsLocationValid(x, y) ? new LocationModel() { X = x, Y = y } : null;
-
-            
-
-            //  var (x, y) = (currentLocation.X, currentLocation.Y);
-           
-            // ['n','e','s','w'].select(d => +1 - 1 0)
-
-/*            (x, y) = direction switch
-            {
-                "e" => (x, y++),
-                "w" => (x, y--),
-                "s" => (x++, y),
-                "n" => (x--, y),
-                "nw" => (x--, y--), "wn" => (x--, y--),
-                "ne" => (x--, y++), "en" => (x--, y++),
-                "sw" => (x++, y--), "ws" => (x++, y--),
-                "se" => (x++, y++), "es" => (x++, y++),
-                _ => throw new Exception("Invalid command.")
-            };*/
+            return 
+                IsLocationValid(currentLocation.X + x, currentLocation.Y + y) ?
+                new LocationModel() 
+                {
+                    X = currentLocation.X + x,
+                    Y = currentLocation.Y + y
+                } : null;
         }
     }
 }

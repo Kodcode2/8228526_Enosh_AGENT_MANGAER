@@ -114,18 +114,14 @@
       },
       {
         "Name": "direction",
-        "Type": "System.String",
+        "Type": "AgentsRest.Dto.DirectionDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "AgentsRest.Dto.LocationDto",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
+        "Type": "System.Void",
+        "MediaTypes": [],
         "StatusCode": 200
       },
       {
@@ -476,7 +472,7 @@
       },
       {
         "Name": "direction",
-        "Type": "System.String",
+        "Type": "AgentsRest.Dto.DirectionDto",
         "IsRequired": true
       }
     ],
@@ -516,8 +512,8 @@
         "IsRequired": true
       },
       {
-        "Name": "locationDto",
-        "Type": "System.Object",
+        "Name": "location",
+        "Type": "AgentsRest.Dto.LocationDto",
         "IsRequired": true
       }
     ],

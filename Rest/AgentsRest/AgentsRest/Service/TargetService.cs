@@ -34,16 +34,18 @@ namespace AgentsRest.Service
 
         public async Task<TargetModel?> PlaceTargetAsync(int targetId, LocationDto location)
         {
+            if (location == null || !IsLocationValid(location.X, location.Y)) { return null; }
+
             TargetModel? target = await dbContext.Targets.FindAsync(targetId);
 
             if (target == null || location == null) { return null; }
 
-            if (!IsLocationValid(location.X, location.Y))
-            { throw new Exception($"Location X: {location.X}, Y: {location.Y}, not valid."); }
-
             target.X = location.X;
             target.Y = location.Y;
             await dbContext.SaveChangesAsync();
+
+            await missionService.GetAllMissionsAsync(); // After updating a new location, performing a possible task check
+
             return target;
         }
 
@@ -55,13 +57,13 @@ namespace AgentsRest.Service
 
             await locationService.MoveLocationAsync(target, direction);
 
-            await missionService.GetAllMissionsAsync();
+            await missionService.GetAllMissionsAsync(); // After updating a new location, performing a possible task check
 
             return target;
         }
 
-        public async Task<bool> IsTargetExists(int targetId) =>
-            await dbContext.Targets.AnyAsync(t => t.Id == targetId);
+        public async Task<bool> IsTargetExistAsync(int id) =>
+            await dbContext.Targets.AnyAsync(t => t.Id == id);
 
         // Get All Targets (If there are no Targets return empty list)
         public async Task<List<TargetModel>> GetAllTargetsAsync() =>
@@ -69,10 +71,6 @@ namespace AgentsRest.Service
 
         // Get Target by id, if not exists throw error
         public async Task<TargetModel?> GetTargetByIdAsync(int id) =>
-            await dbContext.Targets.FindAsync(id) 
-            ?? null;
-
-        public async Task<bool> IsTargetExistAsync(int id) =>
-            await dbContext.Targets.AnyAsync(t => t.Id == id);
+            await dbContext.Targets.FindAsync(id);
     }
 }

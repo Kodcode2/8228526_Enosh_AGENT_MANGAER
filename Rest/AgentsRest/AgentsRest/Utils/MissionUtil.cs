@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: Util Utils
 
+using Accord.Math;
 using AgentsRest.Dto;
 using AgentsRest.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,15 +18,12 @@ namespace AgentsRest.Utils
 
         public static double ComputeTimeLeft(double distance) => distance / 5;
 
-        public static int ComputeDistance(int x1, int y1, int x2, int y2)
-        {
-            double distance = Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
-            return (int)Math.Round(distance);
-        }
-
         public static bool IsEliminated(LocationModel targetLocation, LocationModel agentLocation) =>
             agentLocation.X == targetLocation.X && agentLocation.Y == targetLocation.Y
             ? true : false;
+
+        public static double ComputeDistance(int x1, int y1, int x2, int y2) =>
+            Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
 
         public static (int x, int y) MovePointTowards(int x1, int y1, int x2, int y2)
         {

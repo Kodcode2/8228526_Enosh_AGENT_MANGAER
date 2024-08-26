@@ -24,8 +24,6 @@ namespace AgentsRest
             // Add DbContext
             builder.Services.AddDbContext<ApplicationDbContext>();
 
-            //builder.Services.AddTransient(typeof(Lazy<>), typeof(Lazy<>));
-
             // Add Services
             builder.Services.AddScoped<IAgentService, AgentService>();
             builder.Services.AddScoped<ITargetService, TargetService>();

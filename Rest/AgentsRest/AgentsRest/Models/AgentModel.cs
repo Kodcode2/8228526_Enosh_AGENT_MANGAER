@@ -9,7 +9,7 @@ namespace AgentsRest.Models
         Inactive
     }
 
-    public class AgentModel
+    public class AgentModel : ILocationModel
     {
         [Key]
         public int Id { get; set; }
