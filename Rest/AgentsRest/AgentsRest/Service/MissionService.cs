@@ -5,6 +5,7 @@ using Accord.Collections;
 using AgentsApi.Data;
 using Microsoft.EntityFrameworkCore;
 using AgentsRest.Dto;
+using Microsoft.Extensions.Logging;
 
 
 namespace AgentsRest.Service
@@ -19,52 +20,66 @@ namespace AgentsRest.Service
         private ITargetService targetService => serviceProvider.GetRequiredService<ITargetService>();
         private ILocationService locationService => serviceProvider.GetRequiredService<ILocationService>();
 
+        private static readonly SemaphoreSlim _semaphore = new (1, 1);
+
         public async Task<List<MissionModel>> UpdateAllMissionsAsync()
         {
-            List<MissionModel> activeMissions =
-                await dbContext.Missions
-                .Where(m => m.Status == MissionStatus.Assigned)
-                .ToListAsync();
+                List<MissionModel> activeMissions =
+                    await dbContext.Missions
+                    .Where(m => m.Status == MissionStatus.Assigned)
+                    .ToListAsync();
 
-            activeMissions.Where(m => !IsMissionLegal(m))
-                .ToList()
-                .ForEach(m => m.Status = MissionStatus.Canceled);
+                activeMissions.Where(m => !IsMissionLegal(m))
+                    .ToList()
+                    .ForEach(m => m.Status = MissionStatus.Canceled);
 
-            List<MissionModel> updatedActiveMissions =
-                activeMissions.Where(m => m.Status == MissionStatus.Assigned)
-                .ToList();
+                List<MissionModel> updatedActiveMissions =
+                    activeMissions.Where(m => m.Status == MissionStatus.Assigned)
+                    .ToList();
 
-            updatedActiveMissions.ForEach(m => MoveAgentTowardsMission(m));
-            return updatedActiveMissions;
+                updatedActiveMissions.ForEach(m => MoveAgentTowardsMission(m));
+                return updatedActiveMissions;
         }
 
         public async Task<List<MissionModel>> GetAllMissionsAsync()
         {
-            List<MissionModel> possibleMissions = await FindPossibleMissionsAsync();
-
-            if (possibleMissions == null || !possibleMissions.Any()) { return new List<MissionModel>(); }
-
-            List<MissionModel> existingMissions = await dbContext.Missions.ToListAsync();
-
-            List<MissionModel> filteredMissions = possibleMissions
-                .Where(newMission => 
-                    !existingMissions.Any(existMission => 
-                        IsMissionsTheSame(newMission, existMission)
-                    )
-                )
-                .ToList();
-
-            if (filteredMissions.Any())
+            await _semaphore.WaitAsync();
+            try
             {
-                await dbContext.Missions.AddRangeAsync(filteredMissions);
-                await dbContext.SaveChangesAsync();
-            }
+                List<MissionModel> possibleMissions = await FindPossibleMissionsAsync();
 
-            return await dbContext.Missions.ToListAsync();
+                if (possibleMissions == null || !possibleMissions.Any())
+                {
+                    return await dbContext.Missions.ToListAsync();
+                }
+
+                List<MissionModel> existingMissions = await dbContext.Missions.ToListAsync();
+
+                List<MissionModel> filteredMissions = possibleMissions
+                    .Where(newMission =>
+                        !existingMissions.Any(existMission =>
+                            IsMissionsTheSame(newMission, existMission)
+                        )
+                    )
+                    .ToList();
+
+                if (filteredMissions.Any())
+                {
+                    await dbContext.Missions.AddRangeAsync(filteredMissions);
+                    await dbContext.SaveChangesAsync();
+                }
+
+                return await dbContext.Missions.ToListAsync();
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
 
         public async Task<List<MissionModel>> FindPossibleMissionsAsync()
         {
+            await _semaphore.WaitAsync();
             try
             {
                 List<AgentModel> agents = await dbContext.Agents
@@ -94,6 +109,10 @@ namespace AgentsRest.Service
             {
                 logger.LogError(ex, "An error occurred while finding possible missions.");
                 return new List<MissionModel>();
+            }
+            finally
+            {
+                _semaphore.Release();
             }
         }
 

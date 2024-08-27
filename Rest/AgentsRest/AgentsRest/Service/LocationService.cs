@@ -17,7 +17,7 @@ namespace AgentsRest.Service
         private ITargetService targetService => serviceProvider.GetRequiredService<ITargetService>();
         private IMissionService missionService => serviceProvider.GetRequiredService<IMissionService>();
 
-        public async Task<T?> MoveLocationAsync<T>(T location, string direction) where T : class, ILocationModel 
+        public async Task<T?> MoveLocationAsync<T>(T location, string direction) where T : class, ILocationModel
         {
             if (location == null || direction == null)
             {
